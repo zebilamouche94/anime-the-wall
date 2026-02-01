@@ -317,7 +317,27 @@ function setupEventListeners() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();
     });
+    
+    // ============================================
+    // THÈME CLAIR/SOMBRE (NOUVEAU)
+    // ============================================
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        // Clic sur le bouton
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            themeToggle.textContent = document.body.classList.contains('light-theme') ? '☀️' : '🌙';
+            localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+        });
+        
+        // Charger le thème au démarrage
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-theme');
+            themeToggle.textContent = '☀️';
+        }
+    }
 }
+
 document.getElementById('theme-toggle').addEventListener('click', () => {
     document.body.classList.toggle('light-theme');
     const btn = document.getElementById('theme-toggle');
@@ -327,11 +347,7 @@ document.getElementById('theme-toggle').addEventListener('click', () => {
     localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
 });
 
-// Charger le thème au démarrage
-if (localStorage.getItem('theme') === 'light') {
-    document.body.classList.add('light-theme');
-    document.getElementById('theme-toggle').textContent = '☀️';
-}
+
 
 // ============================================
 // LANCEMENT DU JEU
