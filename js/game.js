@@ -126,9 +126,7 @@ function renderGrid() {
     }
     
     grid.innerHTML = '';
-    const containerWidth = 5000;
-    const containerHeight = 4000;
-    const fragmentSize = 200;
+const containerHeight = 6000;    const fragmentSize = 200;
     
     animeData.forEach((anime, index) => {
         const card = document.createElement('div');
