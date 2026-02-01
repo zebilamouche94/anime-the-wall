@@ -279,21 +279,6 @@ body {
     font-size: 1.5rem;
 }
 
-/* Boutons HUD plus grands */
-.btn-secondary {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 12px 22px;
-    font-size: 1.1rem;
-    backdrop-filter: blur(10px);
-}
-
-.btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateY(-1px);
-}
-
 /* ============================================
    BARRE DE PROGRESSION (En bas)
    ============================================ */
@@ -328,11 +313,11 @@ body {
     right: 20px;
     color: white;
     font-weight: 600;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(10px);
-    padding: 6px 14px;
+    padding: 8px 16px;
     border-radius: 20px;
     z-index: 1001;
     opacity: 0;
@@ -356,7 +341,7 @@ body {
     color: white;
     padding: 10px 20px;
     border-radius: 25px;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     z-index: 999;
     opacity: 0;
     pointer-events: none;
@@ -384,7 +369,7 @@ body {
     right: 0;
     bottom: 0;
     overflow: hidden;
-    background: var(--dark);
+    background: #1a1a2e;
     cursor: grab;
 }
 
@@ -393,81 +378,124 @@ body {
 }
 
 #zoom-container {
-    width: fit-content;
-    min-width: 100%;
-    min-height: 100%;
+    width: 100%;
+    height: 100%;
     touch-action: none;
 }
 
 /* ============================================
-   GRILLE DES AFFICHES - REMPLIT TOUT L'ESPACE
+   GRILLE COLLAGE CHAOTIQUE - STYLE DÉCHIRÉ
    ============================================ */
 #poster-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-    gap: 18px;
-    padding: 60px;
-    width: 100vw;
-    min-height: 100vh;
-    align-content: start;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 .poster-card {
-    position: relative;
-    aspect-ratio: 2/3;
+    position: absolute;
+    width: 180px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     transform-style: preserve-3d;
-    border-radius: 6px;
-    overflow: visible;
+    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.6));
 }
 
 .poster-card img {
     width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: cover;
-    box-shadow: 
-        0 4px 8px rgba(0,0,0,0.4),
-        0 8px 16px rgba(0,0,0,0.3);
-    transition: transform 0.3s, box-shadow 0.3s;
-    border-radius: 6px;
+    display: block;
+    /* Effet bordures déchirées */
+    clip-path: polygon(
+        2% 0%, 
+        8% 2%, 
+        15% 0%, 
+        22% 3%, 
+        30% 1%, 
+        38% 2%, 
+        45% 0%, 
+        52% 2%, 
+        60% 1%, 
+        68% 3%, 
+        75% 0%, 
+        82% 2%, 
+        90% 1%, 
+        96% 3%, 
+        100% 0%, 
+        98% 8%, 
+        100% 15%, 
+        97% 22%, 
+        99% 30%, 
+        98% 38%, 
+        100% 45%, 
+        98% 52%, 
+        99% 60%, 
+        97% 68%, 
+        100% 75%, 
+        98% 82%, 
+        99% 90%, 
+        97% 96%, 
+        100% 100%, 
+        92% 98%, 
+        85% 100%, 
+        78% 97%, 
+        70% 99%, 
+        62% 98%, 
+        55% 100%, 
+        48% 98%, 
+        40% 99%, 
+        32% 97%, 
+        25% 100%, 
+        18% 98%, 
+        10% 99%, 
+        4% 97%, 
+        0% 100%, 
+        2% 92%, 
+        0% 85%, 
+        3% 78%, 
+        1% 70%, 
+        2% 62%, 
+        0% 55%, 
+        2% 48%, 
+        1% 40%, 
+        3% 32%, 
+        0% 25%, 
+        2% 18%, 
+        1% 10%, 
+        3% 4%
+    );
 }
 
-/* Punaise au survol */
+/* Survol : affiche se soulève */
+.poster-card:hover {
+    transform: scale(1.15) !important;
+    z-index: 999 !important;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.8));
+}
+
+/* Scotch/punaise visible sur toutes les affiches */
 .poster-card::before {
-    content: '📌';
+    content: '';
     position: absolute;
-    top: -10px;
+    top: -5px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 1.8rem;
-    z-index: 5;
-    opacity: 0;
-    transition: opacity 0.3s;
-    filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.5));
-}
-
-.poster-card:hover::before {
-    opacity: 1;
-}
-
-/* Survol : décolle et grandit */
-.poster-card:hover {
-    transform: translateY(-20px) scale(1.25) rotate(0deg) !important;
-    z-index: 100;
-}
-
-.poster-card:hover img {
-    box-shadow: 
-        0 20px 40px rgba(0,0,0,0.6),
-        0 30px 60px rgba(0,0,0,0.5);
+    width: 30px;
+    height: 30px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent);
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    pointer-events: none;
 }
 
 /* État trouvé */
 .poster-card.found {
-    opacity: 0.4;
-    filter: grayscale(70%);
-    pointer-events: none;
+    opacity: 0.3;
+    filter: grayscale(100%) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
 }
 
 .poster-card.found::after {
@@ -476,12 +504,12 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 4rem;
-    color: var(--success);
+    font-size: 5rem;
+    color: #51cf66;
     text-shadow: 
-        2px 2px 4px rgba(0,0,0,0.8),
-        0 0 20px rgba(81, 207, 102, 0.8);
-    z-index: 10;
+        3px 3px 6px rgba(0,0,0,0.9),
+        0 0 30px rgba(81, 207, 102, 0.8);
+    z-index: 20;
     animation: checkmarkPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
@@ -498,37 +526,6 @@ body {
         opacity: 1;
     }
 }
-
-/* Responsive */
-@media (min-width: 1600px) {
-    #poster-grid {
-        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-        gap: 20px;
-    }
-}
-
-@media (min-width: 2560px) {
-    #poster-grid {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 22px;
-    }
-}
-
-@media (max-width: 1200px) {
-    #poster-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 15px;
-    }
-}
-
-@media (max-width: 768px) {
-    #poster-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        gap: 12px;
-        padding: 40px 20px;
-    }
-}
-
 
 /* ============================================
    MODALE
@@ -686,8 +683,8 @@ body {
     background: rgba(255, 255, 255, 0.1);
     color: var(--text);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 10px 18px;
-    font-size: 0.9rem;
+    padding: 12px 22px;
+    font-size: 1.1rem;
     backdrop-filter: blur(10px);
 }
 
@@ -761,22 +758,9 @@ footer p {
 /* ============================================
    RESPONSIVE
    ============================================ */
-@media (min-width: 1600px) {
-    #poster-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    }
-}
-
-@media (min-width: 2560px) {
-    #poster-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    }
-}
-
 @media (max-width: 1200px) {
-    #poster-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 12px;
+    .poster-card {
+        width: 150px;
     }
 }
 
@@ -793,16 +777,14 @@ footer p {
     }
     
     .stat {
-        padding: 8px 14px;
-        font-size: 0.85rem;
+        padding: 10px 16px;
+        font-size: 0.95rem;
     }
     
-    .stat .value { font-size: 1.1rem; }
+    .stat .value { font-size: 1.3rem; }
     
-    #poster-grid {
-        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-        gap: 10px;
-        padding: 30px 20px;
+    .poster-card {
+        width: 120px;
     }
     
     #instructions {

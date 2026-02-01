@@ -76,11 +76,16 @@ function startGame() {
 }
 
 // ============================================
-// GÉNÉRATION DE LA GRILLE
+// GÉNÉRATION DE LA GRILLE - STYLE COLLAGE
 // ============================================
 function renderGrid() {
     const grid = document.getElementById('poster-grid');
     grid.innerHTML = '';
+    
+    const gridWidth = window.innerWidth;
+    const gridHeight = window.innerHeight;
+    const posterWidth = window.innerWidth > 768 ? 180 : 120;
+    const posterHeight = posterWidth * 1.5; // Ratio 2:3
     
     animeData.forEach((anime, index) => {
         const card = document.createElement('div');
@@ -91,9 +96,33 @@ function renderGrid() {
             card.classList.add('found');
         }
         
-        // Rotation aléatoire
-        const rotation = (Math.random() * 10 - 5);
+        // Position aléatoire mais qui remplit l'écran
+        const cols = Math.floor(gridWidth / (posterWidth * 0.7));
+        const rows = Math.ceil(animeData.length / cols);
+        
+        const col = index % cols;
+        const row = Math.floor(index / cols);
+        
+        const baseX = col * (posterWidth * 0.7);
+        const baseY = row * (posterHeight * 0.7);
+        
+        // Ajouter du random pour le chaos
+        const randomX = (Math.random() - 0.5) * 80;
+        const randomY = (Math.random() - 0.5) * 80;
+        
+        const x = baseX + randomX;
+        const y = baseY + randomY;
+        
+        // Rotation aléatoire forte
+        const rotation = (Math.random() - 0.5) * 30; // -15° à +15°
+        
+        // Z-index aléatoire pour superposition
+        const zIndex = Math.floor(Math.random() * 50);
+        
+        card.style.left = `${x}px`;
+        card.style.top = `${y}px`;
         card.style.transform = `rotate(${rotation}deg)`;
+        card.style.zIndex = zIndex;
         
         const img = document.createElement('img');
         img.src = `assets/posters/${anime.poster}`;
@@ -105,6 +134,7 @@ function renderGrid() {
         grid.appendChild(card);
     });
 }
+
 
 // ============================================
 // PANZOOM (Zoom/Pan interactif avec limites)
