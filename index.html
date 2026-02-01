@@ -17,15 +17,12 @@
     <!-- Fuse.js pour la recherche floue -->
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
 </head>
-<!-- Canvas Confetti -->
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
 <body>
     
     <!-- Header avec titre -->
     <header id="main-header">
         <h1>🎌 ANIME THE WALL</h1>
-        <p class="subtitle">Trouvez les 66 animes - 3 erreurs max !</p>
+        <p class="subtitle">Explorez le mur - Trouvez les 66 animes - 3 erreurs max !</p>
     </header>
 
     <!-- HUD (Score + Vies) -->
@@ -41,19 +38,25 @@
         </div>
         <button id="reset-btn" class="btn-secondary">🔄 Recommencer</button>
         <button id="theme-toggle" class="btn-secondary" title="Changer de thème">🌙</button>
-        <button id="hard-mode-toggle" class="btn-secondary">😎 Mode Difficile</button>
-
     </div>
-<!-- Barre de progression -->
-<div id="progress-container">
-    <div id="progress-bar"></div>
-    <span id="progress-text">0%</span>
-</div>
 
-    <!-- Grille des affiches -->
-    <main>
-        <div id="poster-grid"></div>
+    <!-- Barre de progression -->
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+        <span id="progress-text">0%</span>
+    </div>
+
+    <!-- Grille des affiches avec zoom/pan -->
+    <main id="wall-container">
+        <div id="zoom-container">
+            <div id="poster-grid"></div>
+        </div>
     </main>
+
+    <!-- Instructions flottantes -->
+    <div id="instructions">
+        🖱️ Cliquez et glissez pour explorer | 🔍 Molette pour zoomer
+    </div>
 
     <!-- Modale de saisie -->
     <div id="modal" class="hidden">
@@ -108,9 +111,9 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
     <script src="js/data.js"></script>
     <script src="js/game.js"></script>
-    
-
 </body>
 </html>

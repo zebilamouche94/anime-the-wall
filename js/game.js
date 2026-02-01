@@ -5,7 +5,7 @@ let lives = 3;
 let currentAnime = null;
 let startTime = Date.now();
 
-// Configuration Fuse.js pour recherche floue
+// Configuration Fuse.js
 const fuse = new Fuse(animeData, {
     keys: ['title', 'synonyms'],
     threshold: 0.35,
@@ -13,7 +13,7 @@ const fuse = new Fuse(animeData, {
     minMatchCharLength: 2
 });
 
-// Charger progression depuis LocalStorage
+// Charger progression
 let foundAnimes = JSON.parse(localStorage.getItem('animeTheWall_found') || '[]');
 let savedLives = parseInt(localStorage.getItem('animeTheWall_lives') || '3');
 let savedStartTime = parseInt(localStorage.getItem('animeTheWall_startTime') || Date.now());
@@ -29,11 +29,13 @@ function init() {
     updateStats();
     setupEventListeners();
     
-    // Enregistrer l'heure de démarrage si nouvelle partie
     if (foundAnimes.length === 0) {
         startTime = Date.now();
         localStorage.setItem('animeTheWall_startTime', startTime);
     }
+    
+    // Initialiser Panzoom après un court délai
+    setTimeout(initPanzoom, 300);
 }
 
 // ============================================
@@ -48,29 +50,13 @@ function renderGrid() {
         card.className = 'poster-card';
         card.dataset.id = anime.id;
         
-        // Marquer comme trouvé si dans le localStorage
         if (foundAnimes.includes(anime.id)) {
             card.classList.add('found');
         }
         
-        // === RANDOMISATION VISUELLE ===
-        
-        // Taille aléatoire (certaines affiches plus grandes)
-        const sizes = ['small', 'normal', 'large'];
-        const randomSize = sizes[index % 3];
-        card.classList.add(randomSize);
-        
-        // Rotation aléatoire légère
-        const rotation = (Math.random() * 8 - 4); // Entre -4° et +4°
-        card.style.setProperty('--rotation', `${rotation}deg`);
-        
-        // Décalage vertical aléatoire
-        const offsetY = (Math.random() * 20 - 10); // Entre -10px et +10px
-        card.style.setProperty('--offset-y', `${offsetY}px`);
-        
-        // Z-index aléatoire pour superposition
-        const zIndex = Math.floor(Math.random() * 10);
-        card.style.zIndex = zIndex;
+        // Rotation aléatoire
+        const rotation = (Math.random() * 10 - 5);
+        card.style.transform = `rotate(${rotation}deg)`;
         
         const img = document.createElement('img');
         img.src = `assets/posters/${anime.poster}`;
@@ -81,21 +67,47 @@ function renderGrid() {
         card.addEventListener('click', () => openModal(anime));
         grid.appendChild(card);
     });
-    // Occultation partielle aléatoire (30% des affiches)
-if (Math.random() > 0.7 && !foundAnimes.includes(anime.id)) {
-    const obscureTypes = ['obscured-top', 'obscured-bottom', 'obscured-left', 'obscured-right'];
-    const randomObscure = obscureTypes[Math.floor(Math.random() * obscureTypes.length)];
-    card.classList.add('obscured', randomObscure);
 }
 
+// ============================================
+// PANZOOM (Zoom/Pan interactif)
+// ============================================
+function initPanzoom() {
+    const container = document.getElementById('wall-container');
+    const element = document.getElementById('zoom-container');
+    
+    if (element && typeof Panzoom !== 'undefined') {
+        const panzoom = Panzoom(element, {
+            maxScale: 2.5,
+            minScale: 0.6,
+            step: 0.15,
+            contain: 'outside',
+            cursor: 'grab',
+            animate: true,
+            startScale: 1,
+            startX: 0,
+            startY: 0
+        });
+        
+        // Zoom avec la molette
+        container.addEventListener('wheel', (e) => {
+            if (!e.target.closest('.poster-card')) {
+                e.preventDefault();
+                panzoom.zoomWithWheel(e);
+            }
+        });
+        
+        console.log('✅ Panzoom activé - Vous pouvez explorer le mur !');
+    } else {
+        console.warn('⚠️ Panzoom non disponible');
+    }
 }
-
 
 // ============================================
 // GESTION DE LA MODALE
 // ============================================
 function openModal(anime) {
-    if (foundAnimes.includes(anime.id)) return; // Déjà trouvé
+    if (foundAnimes.includes(anime.id)) return;
     
     currentAnime = anime;
     document.getElementById('modal-poster').src = `assets/posters/${anime.poster}`;
@@ -111,16 +123,13 @@ function closeModal() {
 }
 
 // ============================================
-// VALIDATION DE LA RÉPONSE
+// VALIDATION
 // ============================================
 function validateAnswer() {
     const guess = document.getElementById('guess-input').value.trim();
     if (!guess || guess.length < 2) return;
     
-    // Recherche floue avec Fuse.js
     const results = fuse.search(guess);
-    
-    // Vérifier si le premier résultat correspond à l'anime sélectionné
     const isCorrect = results.length > 0 && results[0].item.id === currentAnime.id;
     
     if (isCorrect) {
@@ -130,56 +139,40 @@ function validateAnswer() {
     }
 }
 
-// ============================================
-// BONNE RÉPONSE
-// ============================================
 function handleCorrect() {
-    // Marquer comme trouvé
     foundAnimes.push(currentAnime.id);
     localStorage.setItem('animeTheWall_found', JSON.stringify(foundAnimes));
     
-    // Mettre à jour visuellement
     const card = document.querySelector(`[data-id="${currentAnime.id}"]`);
     card.classList.add('found');
     
-    // Son de victoire (optionnel)
     playSound('correct');
-    
     updateStats();
     closeModal();
     
-    // Vérifier si victoire totale
     if (foundAnimes.length === animeData.length) {
         setTimeout(showVictory, 500);
     }
 }
 
-// ============================================
-// MAUVAISE RÉPONSE
-// ============================================
 function handleWrong() {
     lives--;
     localStorage.setItem('animeTheWall_lives', lives);
     updateStats();
     
-    // Afficher message d'erreur
     const errorMsg = document.getElementById('error-msg');
     errorMsg.classList.remove('hidden');
     
-    // Animation shake
     document.querySelector('.modal-content').classList.add('shake');
     setTimeout(() => {
         document.querySelector('.modal-content').classList.remove('shake');
     }, 400);
     
-    // Son d'erreur (optionnel)
     playSound('wrong');
     
-    // Vider l'input
     document.getElementById('guess-input').value = '';
     document.getElementById('guess-input').focus();
     
-    // Game Over
     if (lives === 0) {
         setTimeout(showGameOver, 500);
     }
@@ -189,26 +182,25 @@ function handleWrong() {
 // MISE À JOUR DES STATS
 // ============================================
 function updateStats() {
-    function updateStats() {
-    document.getElementById('score').textContent = foundAnimes.length;
+    const scoreEl = document.getElementById('score');
+    scoreEl.textContent = foundAnimes.length;
+    scoreEl.classList.add('score-update');
+    setTimeout(() => scoreEl.classList.remove('score-update'), 500);
+    
     document.getElementById('lives').textContent = '❤️'.repeat(Math.max(0, lives));
     
-    // Animation du score
-    document.getElementById('score').classList.add('score-update');
-    setTimeout(() => {
-        document.getElementById('score').classList.remove('score-update');
-    }, 500);
-    
     // Barre de progression
-    const progress = (foundAnimes.length / animeData.length) * 100;
-    document.getElementById('progress-bar').style.width = progress + '%';
-    document.getElementById('progress-text').textContent = Math.round(progress) + '%';
-}
-
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    if (progressBar && progressText) {
+        const progress = (foundAnimes.length / animeData.length) * 100;
+        progressBar.style.width = progress + '%';
+        progressText.textContent = Math.round(progress) + '%';
+    }
 }
 
 // ============================================
-// AFFICHAGE VICTOIRE
+// VICTOIRE / GAME OVER
 // ============================================
 function showVictory() {
     closeModal();
@@ -222,36 +214,34 @@ function showVictory() {
     
     document.getElementById('victory-modal').classList.remove('hidden');
     
-    // 🎉 CONFETTIS !
-    const duration = 3 * 1000;
-    const end = Date.now() + duration;
+    // Confettis
+    if (typeof confetti !== 'undefined') {
+        const duration = 3 * 1000;
+        const end = Date.now() + duration;
 
-    (function frame() {
-        confetti({
-            particleCount: 7,
-            angle: 60,
-            spread: 55,
-            origin: { x: 0 },
-            colors: ['#ff6b6b', '#51cf66', '#667eea', '#ffd93d']
-        });
-        confetti({
-            particleCount: 7,
-            angle: 120,
-            spread: 55,
-            origin: { x: 1 },
-            colors: ['#ff6b6b', '#51cf66', '#667eea', '#ffd93d']
-        });
+        (function frame() {
+            confetti({
+                particleCount: 7,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#ff6b6b', '#51cf66', '#667eea', '#ffd93d']
+            });
+            confetti({
+                particleCount: 7,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#ff6b6b', '#51cf66', '#667eea', '#ffd93d']
+            });
 
-        if (Date.now() < end) {
-            requestAnimationFrame(frame);
-        }
-    }());
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
+    }
 }
 
-
-// ============================================
-// AFFICHAGE GAME OVER
-// ============================================
 function showGameOver() {
     closeModal();
     document.getElementById('final-score').textContent = foundAnimes.length;
@@ -259,7 +249,7 @@ function showGameOver() {
 }
 
 // ============================================
-// RESET DU JEU
+// RESET
 // ============================================
 function resetGame() {
     if (foundAnimes.length > 0 && lives > 0) {
@@ -282,37 +272,34 @@ function resetGame() {
     
     document.getElementById('victory-modal').classList.add('hidden');
     document.getElementById('gameover-modal').classList.add('hidden');
+    
+    // Réinitialiser Panzoom
+    setTimeout(initPanzoom, 300);
 }
 
 // ============================================
-// PARTAGE SOCIAL
+// PARTAGE
 // ============================================
 function shareScore() {
     const text = `J'ai trouvé les 66 animes sur Anime The Wall ! 🎌\nPeux-tu faire mieux ?\n\n`;
     const url = window.location.href;
     
-    // Web Share API (mobile)
     if (navigator.share) {
-        navigator.share({
-            title: 'Anime The Wall',
-            text: text,
-            url: url
-        });
+        navigator.share({ title: 'Anime The Wall', text: text, url: url });
     } else {
-        // Fallback : copier dans le presse-papier
         navigator.clipboard.writeText(text + url);
         alert('Lien copié dans le presse-papier !');
     }
 }
 
 // ============================================
-// SONS (Optionnel)
+// SONS
 // ============================================
 function playSound(type) {
     try {
-        const audio = new Audio(`assets/sounds/${type}.mp3`);
+        const audio = new Audio(`assets/sounds/${type}.wav`);
         audio.volume = 0.3;
-        audio.play().catch(() => {}); // Ignorer les erreurs (pas de son = pas grave)
+        audio.play().catch(() => {});
     } catch (e) {}
 }
 
@@ -320,55 +307,34 @@ function playSound(type) {
 // EVENT LISTENERS
 // ============================================
 function setupEventListeners() {
-    // Mode difficile toggle
-const hardModeBtn = document.getElementById('hard-mode-toggle');
-if (hardModeBtn) {
-    hardModeBtn.addEventListener('click', () => {
-        document.body.classList.toggle('hard-mode');
-        hardModeBtn.textContent = document.body.classList.contains('hard-mode') 
-            ? '😵 Mode Normal' 
-            : '😎 Mode Difficile';
-    });
-}
-
-    // Validation
     document.getElementById('submit-btn').addEventListener('click', validateAnswer);
     
     document.getElementById('guess-input').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') validateAnswer();
     });
     
-    // Fermeture modale
     document.getElementById('close-modal').addEventListener('click', closeModal);
-    
     document.querySelector('#modal .modal-backdrop')?.addEventListener('click', closeModal);
     
-    // Boutons reset/restart
     document.getElementById('reset-btn').addEventListener('click', resetGame);
     document.getElementById('restart-btn')?.addEventListener('click', resetGame);
     document.getElementById('retry-btn')?.addEventListener('click', resetGame);
     
-    // Partage
     document.getElementById('share-btn')?.addEventListener('click', shareScore);
     
-    // Raccourcis clavier
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();
     });
     
-    // ============================================
-    // THÈME CLAIR/SOMBRE (NOUVEAU)
-    // ============================================
+    // Thème toggle
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {
-        // Clic sur le bouton
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('light-theme');
             themeToggle.textContent = document.body.classList.contains('light-theme') ? '☀️' : '🌙';
             localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
         });
         
-        // Charger le thème au démarrage
         if (localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light-theme');
             themeToggle.textContent = '☀️';
@@ -376,29 +342,7 @@ if (hardModeBtn) {
     }
 }
 
-document.getElementById('theme-toggle').addEventListener('click', () => {
-    document.body.classList.toggle('light-theme');
-    const btn = document.getElementById('theme-toggle');
-    btn.textContent = document.body.classList.contains('light-theme') ? '☀️' : '🌙';
-    
-    // Sauvegarder la préférence
-    localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
-});
-
-// Effet parallaxe léger au scroll
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const posters = document.querySelectorAll('.poster-card');
-    
-    posters.forEach((poster, index) => {
-        const speed = (index % 5) * 0.05; // Vitesse différente par carte
-        const yPos = scrolled * speed;
-        poster.style.transform = `translateY(${yPos}px) rotate(var(--rotation, 0deg))`;
-    });
-});
-
-
 // ============================================
-// LANCEMENT DU JEU
+// LANCEMENT
 // ============================================
 init();
