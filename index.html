@@ -19,32 +19,37 @@
 </head>
 <body>
     
-    <!-- Header avec titre -->
+    <!-- Header minimaliste flottant -->
     <header id="main-header">
         <h1>🎌 ANIME THE WALL</h1>
         <p class="subtitle">Explorez le mur - Trouvez les 66 animes - 3 erreurs max !</p>
     </header>
 
-    <!-- HUD (Score + Vies) -->
+    <!-- HUD minimaliste (coins de l'écran) -->
     <div id="hud">
-        <div class="stat">
-            <span class="label">Trouvés:</span>
-            <span id="score" class="value">0</span>
-            <span class="total">/66</span>
+        <div class="hud-left">
+            <div class="stat">
+                <span class="label">Trouvés:</span>
+                <span id="score" class="value">0</span>
+                <span class="total">/66</span>
+            </div>
+            <div class="stat lives-stat">
+                <span class="label">Vies:</span>
+                <span id="lives">❤️❤️❤️</span>
+            </div>
         </div>
-        <div class="stat lives-stat">
-            <span class="label">Vies:</span>
-            <span id="lives">❤️❤️❤️</span>
+        
+        <div class="hud-right">
+            <button id="reset-btn" class="btn-secondary">🔄</button>
+            <button id="theme-toggle" class="btn-secondary" title="Changer de thème">🌙</button>
         </div>
-        <button id="reset-btn" class="btn-secondary">🔄 Recommencer</button>
-        <button id="theme-toggle" class="btn-secondary" title="Changer de thème">🌙</button>
     </div>
 
-    <!-- Barre de progression -->
+    <!-- Barre de progression (en bas) -->
     <div id="progress-container">
         <div id="progress-bar"></div>
-        <span id="progress-text">0%</span>
     </div>
+    <div id="progress-text">0%</div>
 
     <!-- Grille des affiches avec zoom/pan -->
     <main id="wall-container">
@@ -105,7 +110,7 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer discret -->
     <footer>
         <p>Créé avec ❤️ pour les fans d'anime</p>
     </footer>

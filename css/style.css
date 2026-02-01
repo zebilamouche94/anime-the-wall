@@ -6,7 +6,7 @@
     --primary-dark: #ee5a52;
     --success: #51cf66;
     --danger: #ff6b6b;
-    --dark: #1a1a2e;
+    --dark: #0f0f1e;
     --dark-light: #16213e;
     --light: #f8f9fa;
     --text: #ffffff;
@@ -22,75 +22,107 @@
 
 body {
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    background: #0f0f1e;
     min-height: 100vh;
     color: var(--text);
     overflow: hidden;
 }
 
 /* ============================================
-   HEADER
+   HEADER MINIMALISTE (Flottant en haut)
    ============================================ */
 #main-header {
-    text-align: center;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    border-bottom: 3px solid var(--primary);
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 1001;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(15px);
+    padding: 12px 30px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s;
+}
+
+#main-header:hover {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: rgba(255, 107, 107, 0.6);
 }
 
 #main-header h1 {
-    font-size: 2rem;
+    font-size: 1.4rem;
     font-weight: 700;
-    text-shadow: 0 0 20px rgba(255, 107, 107, 0.8);
-    margin-bottom: 5px;
-    letter-spacing: 2px;
-    animation: neonGlow 2s ease-in-out infinite alternate;
-}
-
-@keyframes neonGlow {
-    from { text-shadow: 0 0 10px rgba(255, 107, 107, 0.5); }
-    to { text-shadow: 0 0 20px rgba(255, 107, 107, 0.9), 0 0 30px rgba(255, 107, 107, 0.5); }
+    text-shadow: 0 0 15px rgba(255, 107, 107, 0.6);
+    margin: 0;
+    letter-spacing: 1px;
 }
 
 .subtitle {
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
+    margin-top: 2px;
 }
 
 /* ============================================
-   HUD (Score + Vies)
+   HUD MINIMALISTE (Coins de l'écran)
    ============================================ */
 #hud {
     position: fixed;
-    top: 85px;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(15px);
-    padding: 12px 20px;
+    top: 20px;
+    left: 20px;
+    right: 20px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
+    justify-content: space-between;
+    align-items: flex-start;
     z-index: 1000;
-    border-bottom: 2px solid var(--primary);
+    pointer-events: none;
+}
+
+#hud > * {
+    pointer-events: auto;
+}
+
+/* Stats à gauche */
+.hud-left {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Boutons à droite */
+.hud-right {
+    display: flex;
+    gap: 10px;
 }
 
 .stat {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    padding: 10px 18px;
+    border-radius: 25px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 1rem;
+    gap: 10px;
+    font-size: 0.95rem;
     font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s;
 }
 
-.stat .label { color: var(--text-muted); }
+.stat:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: scale(1.05);
+}
+
+.stat .label { 
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
 .stat .value {
     color: var(--primary);
     font-size: 1.3rem;
@@ -104,23 +136,28 @@ body {
 
 @keyframes scoreJump {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.5); color: var(--success); }
+    50% { transform: scale(1.4); color: var(--success); }
 }
 
-.stat .total { color: var(--text-muted); font-size: 0.9rem; }
-.lives-stat { font-size: 1.3rem; }
+.stat .total { 
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.lives-stat {
+    font-size: 1.2rem;
+}
 
 /* ============================================
-   BARRE DE PROGRESSION
+   BARRE DE PROGRESSION (En bas)
    ============================================ */
 #progress-container {
     position: fixed;
-    top: 135px;
-    left: 20px;
-    right: 20px;
-    height: 6px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.5);
     overflow: hidden;
     z-index: 1000;
 }
@@ -130,52 +167,58 @@ body {
     width: 0%;
     background: linear-gradient(90deg, #51cf66, #69db7c);
     transition: width 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    box-shadow: 0 0 10px rgba(81, 207, 102, 0.5);
+    box-shadow: 0 0 15px rgba(81, 207, 102, 0.6);
 }
 
 #progress-text {
     position: fixed;
-    top: 142px;
-    right: 30px;
+    bottom: 10px;
+    right: 20px;
     color: white;
     font-weight: 600;
-    font-size: 0.85rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    font-size: 0.8rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    padding: 6px 14px;
+    border-radius: 20px;
     z-index: 1001;
 }
 
 /* ============================================
-   INSTRUCTIONS FLOTTANTES
+   INSTRUCTIONS (Auto-disparition)
    ============================================ */
 #instructions {
     position: fixed;
-    top: 155px;
+    bottom: 50px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
     color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 0.85rem;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 0.8rem;
     z-index: 999;
-    animation: fadeOutInstructions 6s forwards;
+    animation: fadeOutInstructions 8s forwards;
     pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 @keyframes fadeOutInstructions {
-    0%, 70% { opacity: 1; }
+    0%, 60% { opacity: 1; }
     100% { opacity: 0; }
 }
 
 /* ============================================
-   CONTAINER ZOOM/PAN
+   CONTAINER ZOOM/PAN (Plein écran)
    ============================================ */
 #wall-container {
     position: fixed;
-    top: 150px;
+    top: 0;
     left: 0;
     right: 0;
-    bottom: 50px;
+    bottom: 0;
     overflow: hidden;
     background: var(--dark);
     cursor: grab;
@@ -197,9 +240,9 @@ body {
    ============================================ */
 #poster-grid {
     display: grid;
-    grid-template-columns: repeat(11, 150px);
-    gap: 12px;
-    padding: 40px;
+    grid-template-columns: repeat(11, 160px);
+    gap: 15px;
+    padding: 50px;
     width: fit-content;
 }
 
@@ -210,7 +253,7 @@ body {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     transform-style: preserve-3d;
     border-radius: 6px;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .poster-card img {
@@ -224,11 +267,11 @@ body {
     border-radius: 6px;
 }
 
-/* Punaise/Scotch au survol */
+/* Punaise au survol */
 .poster-card::before {
     content: '📌';
     position: absolute;
-    top: -8px;
+    top: -10px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 1.8rem;
@@ -244,20 +287,20 @@ body {
 
 /* Survol : décolle et grandit */
 .poster-card:hover {
-    transform: translateY(-15px) scale(1.2) rotate(0deg) !important;
+    transform: translateY(-20px) scale(1.25) rotate(0deg) !important;
     z-index: 100;
 }
 
 .poster-card:hover img {
     box-shadow: 
-        0 15px 30px rgba(0,0,0,0.5),
-        0 25px 50px rgba(0,0,0,0.4);
+        0 20px 40px rgba(0,0,0,0.6),
+        0 30px 60px rgba(0,0,0,0.5);
 }
 
 /* État trouvé */
 .poster-card.found {
-    opacity: 0.5;
-    filter: grayscale(60%);
+    opacity: 0.4;
+    filter: grayscale(70%);
     pointer-events: none;
 }
 
@@ -271,7 +314,7 @@ body {
     color: var(--success);
     text-shadow: 
         2px 2px 4px rgba(0,0,0,0.8),
-        0 0 20px rgba(81, 207, 102, 0.6);
+        0 0 20px rgba(81, 207, 102, 0.8);
     z-index: 10;
     animation: checkmarkPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
@@ -310,8 +353,8 @@ body {
 .modal-backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(12px);
 }
 
 .modal-content {
@@ -321,7 +364,7 @@ body {
     border-radius: 16px;
     max-width: 450px;
     width: 100%;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
     border: 2px solid var(--primary);
     animation: modalSlideIn 0.3s ease-out;
 }
@@ -423,10 +466,11 @@ body {
     font-size: 1rem;
     font-weight: 600;
     border: none;
-    border-radius: 8px;
+    border-radius: 25px;
     cursor: pointer;
     transition: all 0.2s;
     font-family: inherit;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .btn-primary {
@@ -445,12 +489,14 @@ body {
     background: rgba(255, 255, 255, 0.1);
     color: var(--text);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 8px 16px;
+    padding: 10px 18px;
     font-size: 0.9rem;
+    backdrop-filter: blur(10px);
 }
 
 .btn-secondary:hover {
     background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
 }
 
 /* ============================================
@@ -488,49 +534,61 @@ body {
 }
 
 /* ============================================
-   FOOTER
+   FOOTER (Caché par défaut)
    ============================================ */
 footer {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.5);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 1000;
+    padding: 8px 20px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    z-index: 900;
+    opacity: 0.3;
+    transition: opacity 0.3s;
+}
+
+footer:hover {
+    opacity: 1;
 }
 
 footer p {
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.75rem;
+    margin: 0;
 }
 
 /* ============================================
    RESPONSIVE
    ============================================ */
 @media (max-width: 768px) {
-    #main-header h1 { font-size: 1.5rem; }
-    .subtitle { font-size: 0.8rem; }
+    #main-header h1 { font-size: 1.1rem; }
+    .subtitle { font-size: 0.7rem; }
     
     #hud {
-        flex-wrap: wrap;
-        gap: 10px;
-        padding: 10px;
+        top: 10px;
+        left: 10px;
+        right: 10px;
     }
     
-    .stat { font-size: 0.9rem; }
+    .stat {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+    }
+    
     .stat .value { font-size: 1.1rem; }
     
     #poster-grid {
-        grid-template-columns: repeat(6, 120px);
-        gap: 10px;
-        padding: 20px;
+        grid-template-columns: repeat(6, 130px);
+        gap: 12px;
+        padding: 30px;
     }
     
     #instructions {
-        font-size: 0.75rem;
-        padding: 6px 12px;
+        font-size: 0.7rem;
+        padding: 8px 16px;
     }
 }
