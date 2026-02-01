@@ -47,13 +47,15 @@ function showStartScreen() {
     const startScreen = document.getElementById('start-screen');
     const startBtn = document.getElementById('start-game-btn');
     
-    startBtn.addEventListener('click', () => {
-        startScreen.classList.add('hidden');
-        setTimeout(() => {
-            startScreen.style.display = 'none';
-            startGame();
-        }, 600);
-    });
+    if (startBtn) {
+        startBtn.addEventListener('click', () => {
+            startScreen.classList.add('hidden');
+            setTimeout(() => {
+                startScreen.style.display = 'none';
+                startGame();
+            }, 600);
+        });
+    }
 }
 
 function startGame() {
@@ -76,17 +78,14 @@ function startGame() {
 }
 
 // ============================================
-// GÉNÉRATION STYLE POP THE WALL - Collage chaotique
-// ============================================
-// ============================================
-// GÉNÉRATION STYLE POP THE WALL - Morceaux découpés
+// GÉNÉRATION - FRAGMENTS DÉCOUPÉS
 // ============================================
 function renderGrid() {
     const grid = document.getElementById('poster-grid');
     grid.innerHTML = '';
     
-    const containerWidth = 3000;
-    const containerHeight = 2400;
+    const containerWidth = 5000;
+    const containerHeight = 4000;
     const fragmentSize = window.innerWidth > 768 ? 200 : 140;
     
     animeData.forEach((anime, index) => {
@@ -98,7 +97,7 @@ function renderGrid() {
             card.classList.add('found');
         }
         
-        // Position aléatoire du fragment dans le mur
+        // Position aléatoire mais répartie
         const cols = Math.floor(containerWidth / (fragmentSize * 0.65));
         const rows = Math.ceil(animeData.length / cols);
         
@@ -112,7 +111,7 @@ function renderGrid() {
         const randomY = (Math.random() - 0.5) * 120;
         
         const x = Math.max(0, Math.min(containerWidth - fragmentSize, baseX + randomX));
-        const y = Math.max(0, Math.min(containerHeight - (fragmentSize * 1.5), baseY + randomY));
+        const y = Math.max(0, Math.min(containerHeight - fragmentSize, baseY + randomY));
         
         // Rotation aléatoire
         const rotation = (Math.random() - 0.5) * 40;
@@ -133,13 +132,11 @@ function renderGrid() {
         img.alt = `Affiche ${anime.id}`;
         img.loading = 'lazy';
         
-        // DÉCOUPAGE : Prendre un morceau aléatoire de l'affiche
-        // Zone centrale (20-80%) pour éviter le texte en haut/bas
-        const cropX = 10 + Math.random() * 40; // 10% à 50% depuis la gauche
-        const cropY = 20 + Math.random() * 40; // 20% à 60% depuis le haut (évite titres)
+        // Découpage : zone centrale pour éviter texte
+        const cropX = 15 + Math.random() * 50;
+        const cropY = 30 + Math.random() * 30;
         
-        // L'image affiche seulement une portion (object-position)
-        img.style.width = '400%'; // 4x plus grande
+        img.style.width = '400%';
         img.style.height = '400%';
         img.style.objectFit = 'cover';
         img.style.objectPosition = `${cropX}% ${cropY}%`;
@@ -150,11 +147,8 @@ function renderGrid() {
     });
 }
 
-
-
-
 // ============================================
-// PANZOOM avec limites ajustées
+// PANZOOM
 // ============================================
 function initPanzoom() {
     const container = document.getElementById('wall-container');
@@ -162,13 +156,13 @@ function initPanzoom() {
     
     if (element && typeof Panzoom !== 'undefined') {
         const panzoom = Panzoom(element, {
-            maxScale: 2.5,      // Zoom max
-            minScale: 0.7,      // PLUS GRAND : Ne peut pas dézoomer en dessous de 70%
+            maxScale: 2.5,
+            minScale: 0.7,
             step: 0.1,
             contain: 'outside',
             cursor: 'grab',
             animate: true,
-            startScale: 0.9,    // Démarre à 90% (plus proche)
+            startScale: 0.9,
             startX: 0,
             startY: 0
         });
@@ -181,13 +175,11 @@ function initPanzoom() {
             }
         });
         
-        console.log('✅ Panzoom activé - Zoom limité entre 70% et 250%');
+        console.log('✅ Panzoom activé');
     } else {
         console.warn('⚠️ Panzoom non disponible');
     }
 }
-
-
 
 // ============================================
 // GESTION DE LA MODALE
@@ -230,7 +222,9 @@ function handleCorrect() {
     localStorage.setItem('animeTheWall_found', JSON.stringify(foundAnimes));
     
     const card = document.querySelector(`[data-id="${currentAnime.id}"]`);
-    card.classList.add('found');
+    if (card) {
+        card.classList.add('found');
+    }
     
     playSound('correct');
     updateStats();
@@ -249,10 +243,13 @@ function handleWrong() {
     const errorMsg = document.getElementById('error-msg');
     errorMsg.classList.remove('hidden');
     
-    document.querySelector('.modal-content').classList.add('shake');
-    setTimeout(() => {
-        document.querySelector('.modal-content').classList.remove('shake');
-    }, 400);
+    const modalContent = document.querySelector('.modal-content');
+    if (modalContent) {
+        modalContent.classList.add('shake');
+        setTimeout(() => {
+            modalContent.classList.remove('shake');
+        }, 400);
+    }
     
     playSound('wrong');
     
@@ -269,11 +266,16 @@ function handleWrong() {
 // ============================================
 function updateStats() {
     const scoreEl = document.getElementById('score');
-    scoreEl.textContent = foundAnimes.length;
-    scoreEl.classList.add('score-update');
-    setTimeout(() => scoreEl.classList.remove('score-update'), 500);
+    if (scoreEl) {
+        scoreEl.textContent = foundAnimes.length;
+        scoreEl.classList.add('score-update');
+        setTimeout(() => scoreEl.classList.remove('score-update'), 500);
+    }
     
-    document.getElementById('lives').textContent = '❤️'.repeat(Math.max(0, lives));
+    const livesEl = document.getElementById('lives');
+    if (livesEl) {
+        livesEl.textContent = '❤️'.repeat(Math.max(0, lives));
+    }
     
     // Barre de progression
     const progressBar = document.getElementById('progress-bar');
@@ -295,8 +297,10 @@ function showVictory() {
     const minutes = Math.floor(elapsedTime / 60000);
     const seconds = Math.floor((elapsedTime % 60000) / 1000);
     
-    document.getElementById('completion-time').textContent = 
-        `Temps : ${minutes}min ${seconds}s`;
+    const completionTimeEl = document.getElementById('completion-time');
+    if (completionTimeEl) {
+        completionTimeEl.textContent = `Temps : ${minutes}min ${seconds}s`;
+    }
     
     document.getElementById('victory-modal').classList.remove('hidden');
     
@@ -332,7 +336,10 @@ function showVictory() {
 
 function showGameOver() {
     closeModal();
-    document.getElementById('final-score').textContent = foundAnimes.length;
+    const finalScoreEl = document.getElementById('final-score');
+    if (finalScoreEl) {
+        finalScoreEl.textContent = foundAnimes.length;
+    }
     document.getElementById('gameover-modal').classList.remove('hidden');
 }
 
@@ -406,20 +413,49 @@ function playSound(type) {
 // EVENT LISTENERS
 // ============================================
 function setupEventListeners() {
-    document.getElementById('submit-btn').addEventListener('click', validateAnswer);
+    const submitBtn = document.getElementById('submit-btn');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', validateAnswer);
+    }
     
-    document.getElementById('guess-input').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') validateAnswer();
-    });
+    const guessInput = document.getElementById('guess-input');
+    if (guessInput) {
+        guessInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') validateAnswer();
+        });
+    }
     
-    document.getElementById('close-modal').addEventListener('click', closeModal);
-    document.querySelector('#modal .modal-backdrop')?.addEventListener('click', closeModal);
+    const closeModalBtn = document.getElementById('close-modal');
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
+    }
     
-    document.getElementById('reset-btn').addEventListener('click', resetGame);
-    document.getElementById('restart-btn')?.addEventListener('click', resetGame);
-    document.getElementById('retry-btn')?.addEventListener('click', resetGame);
+    const modalBackdrop = document.querySelector('#modal .modal-backdrop');
+    if (modalBackdrop) {
+        modalBackdrop.addEventListener('click', closeModal);
+    }
     
-    document.getElementById('share-btn')?.addEventListener('click', shareScore);
+    const resetBtn = document.getElementById('reset-btn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', resetGame);
+    }
+    
+    const restartBtn = document.getElementById('restart-btn');
+    if (restartBtn) {
+        restartBtn.addEventListener('click', resetGame);
+    }
+    
+    const retryBtn = document.getElementById('retry-btn
+    
+    const retryBtn = document.getElementById('retry-btn');
+    if (retryBtn) {
+        retryBtn.addEventListener('click', resetGame);
+    }
+    
+    const shareBtn = document.getElementById('share-btn');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', shareScore);
+    }
     
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();
