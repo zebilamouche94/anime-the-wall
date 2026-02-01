@@ -378,25 +378,23 @@ body {
 }
 
 #zoom-container {
-    width: 100%;
-    height: 100%;
+    width: fit-content;
+    min-width: 100%;
+    min-height: 100%;
     touch-action: none;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 50px 0;
 }
 
 /* ============================================
-   GRILLE DES AFFICHES - PLEINE LARGEUR
+   GRILLE DES AFFICHES - REMPLIT TOUT L'ESPACE
    ============================================ */
 #poster-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 15px;
-    padding: 0 50px;
-    width: 100%;
-    max-width: none;
+    padding: 50px;
+    width: 100vw;
+    min-height: 100vh;
+    align-content: start;
 }
 
 .poster-card {
@@ -719,19 +717,19 @@ footer p {
    ============================================ */
 @media (min-width: 1600px) {
     #poster-grid {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     }
 }
 
 @media (min-width: 2560px) {
     #poster-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
 }
 
 @media (max-width: 1200px) {
     #poster-grid {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
         gap: 12px;
     }
 }
@@ -756,9 +754,9 @@ footer p {
     .stat .value { font-size: 1.1rem; }
     
     #poster-grid {
-        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
         gap: 10px;
-        padding: 0 20px;
+        padding: 30px 20px;
     }
     
     #instructions {
