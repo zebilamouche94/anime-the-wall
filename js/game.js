@@ -107,7 +107,7 @@ function renderGrid() {
 }
 
 // ============================================
-// PANZOOM (Zoom/Pan interactif)
+// PANZOOM (Zoom/Pan interactif avec limites)
 // ============================================
 function initPanzoom() {
     const container = document.getElementById('wall-container');
@@ -115,8 +115,8 @@ function initPanzoom() {
     
     if (element && typeof Panzoom !== 'undefined') {
         const panzoom = Panzoom(element, {
-            maxScale: 2.5,
-            minScale: 0.6,
+            maxScale: 2.5,      // Zoom max
+            minScale: 1,        // IMPORTANT : Ne peut pas dézoomer en dessous de 100%
             step: 0.15,
             contain: 'outside',
             cursor: 'grab',
@@ -134,11 +134,12 @@ function initPanzoom() {
             }
         });
         
-        console.log('✅ Panzoom activé - Vous pouvez explorer le mur !');
+        console.log('✅ Panzoom activé - Zoom limité entre 100% et 250%');
     } else {
         console.warn('⚠️ Panzoom non disponible');
     }
 }
+
 
 // ============================================
 // GESTION DE LA MODALE

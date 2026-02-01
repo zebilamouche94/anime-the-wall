@@ -194,7 +194,7 @@ body {
 }
 
 /* ============================================
-   HUD MINIMALISTE (Caché au départ)
+   HUD MINIMALISTE (Plus grand et lisible)
    ============================================ */
 #hud {
     position: fixed;
@@ -221,42 +221,42 @@ body {
 .hud-left {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
 .hud-right {
     display: flex;
-    gap: 10px;
+    gap: 12px;
 }
 
 .stat {
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    padding: 10px 18px;
-    border-radius: 25px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(15px);
+    padding: 14px 24px;
+    border-radius: 30px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 0.95rem;
+    gap: 12px;
+    font-size: 1.1rem;
     font-weight: 600;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
     transition: all 0.3s;
 }
 
 .stat:hover {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
     transform: scale(1.05);
 }
 
 .stat .label { 
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 1rem;
 }
 
 .stat .value {
     color: var(--primary);
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     font-weight: 700;
     transition: all 0.3s;
 }
@@ -272,11 +272,26 @@ body {
 
 .stat .total { 
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 1rem;
 }
 
 .lives-stat {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+}
+
+/* Boutons HUD plus grands */
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 12px 22px;
+    font-size: 1.1rem;
+    backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
 }
 
 /* ============================================
@@ -389,9 +404,9 @@ body {
    ============================================ */
 #poster-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 15px;
-    padding: 50px;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 18px;
+    padding: 60px;
     width: 100vw;
     min-height: 100vh;
     align-content: start;
@@ -483,6 +498,37 @@ body {
         opacity: 1;
     }
 }
+
+/* Responsive */
+@media (min-width: 1600px) {
+    #poster-grid {
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        gap: 20px;
+    }
+}
+
+@media (min-width: 2560px) {
+    #poster-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 22px;
+    }
+}
+
+@media (max-width: 1200px) {
+    #poster-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    #poster-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 12px;
+        padding: 40px 20px;
+    }
+}
+
 
 /* ============================================
    MODALE
