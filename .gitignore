@@ -1,5 +1,3 @@
-# Created by venv; see https://docs.python.org/3/library/venv.html
-*
 # Python
 __pycache__/
 *.py[cod]
@@ -15,10 +13,10 @@ download_log.json
 Thumbs.db
 *.swp
 
-# Affiches temporaires (optionnel)
-posters_original/
-assets/posters/full/
-assets/posters/thumb/
-
-# Node modules (si tu utilises npm plus tard)
+# Node modules
 node_modules/
+
+# IMPORTANT : Forcer l'inclusion des affiches
+!assets/
+!assets/posters/
+!assets/posters/*.webp
