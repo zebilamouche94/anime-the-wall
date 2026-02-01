@@ -194,13 +194,13 @@ body {
 }
 
 /* ============================================
-   HUD MINIMALISTE
+   HUD MINIMALISTE - VERSION GRANDE
    ============================================ */
 #hud {
     position: fixed;
-    top: 20px;
-    left: 20px;
-    right: 20px;
+    top: 25px;
+    left: 25px;
+    right: 25px;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -221,42 +221,42 @@ body {
 .hud-left {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 15px;
 }
 
 .hud-right {
     display: flex;
-    gap: 12px;
+    gap: 15px;
 }
 
 .stat {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(15px);
-    padding: 14px 24px;
-    border-radius: 30px;
+    padding: 18px 30px;
+    border-radius: 35px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 1.1rem;
+    gap: 15px;
+    font-size: 1.3rem;
     font-weight: 600;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
     transition: all 0.3s;
 }
 
 .stat:hover {
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
     transform: scale(1.05);
 }
 
 .stat .label { 
     color: var(--text-muted);
-    font-size: 1rem;
+    font-size: 1.15rem;
 }
 
 .stat .value {
     color: var(--primary);
-    font-size: 1.6rem;
+    font-size: 2rem;
     font-weight: 700;
     transition: all 0.3s;
 }
@@ -272,12 +272,29 @@ body {
 
 .stat .total { 
     color: var(--text-muted);
-    font-size: 1rem;
+    font-size: 1.15rem;
 }
 
 .lives-stat {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
 }
+
+/* Boutons HUD plus grands */
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 15px 28px;
+    font-size: 1.3rem;
+    backdrop-filter: blur(10px);
+    border-radius: 35px;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
 
 /* ============================================
    BARRE DE PROGRESSION
@@ -309,20 +326,26 @@ body {
 
 #progress-text {
     position: fixed;
-    bottom: 10px;
-    right: 20px;
+    bottom: 15px;
+    right: 25px;
     color: white;
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-weight: 700;
+    font-size: 1.1rem;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
-    padding: 8px 16px;
-    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(15px);
+    padding: 12px 22px;
+    border-radius: 30px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
     z-index: 1001;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
 }
+
+#progress-text.visible {
+    opacity: 1;
+}
+
 
 #progress-text.visible {
     opacity: 1;
@@ -333,25 +356,26 @@ body {
    ============================================ */
 #instructions {
     position: fixed;
-    bottom: 50px;
+    bottom: 60px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(12px);
     color: white;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-size: 0.85rem;
+    padding: 12px 26px;
+    border-radius: 30px;
+    font-size: 1rem;
     z-index: 999;
     opacity: 0;
     pointer-events: none;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.15);
     transition: opacity 0.5s ease-in-out;
 }
 
 #instructions.visible {
     animation: fadeOutInstructions 8s forwards;
 }
+
 
 @keyframes fadeOutInstructions {
     0% { opacity: 0; }

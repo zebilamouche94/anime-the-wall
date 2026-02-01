@@ -137,7 +137,7 @@ function renderGrid() {
 
 
 // ============================================
-// PANZOOM avec limites style Pop The Wall
+// PANZOOM avec limites ajustées
 // ============================================
 function initPanzoom() {
     const container = document.getElementById('wall-container');
@@ -145,13 +145,13 @@ function initPanzoom() {
     
     if (element && typeof Panzoom !== 'undefined') {
         const panzoom = Panzoom(element, {
-            maxScale: 2,        // Zoom max
-            minScale: 0.4,      // Zoom min pour vue d'ensemble
+            maxScale: 2.5,      // Zoom max
+            minScale: 0.7,      // PLUS GRAND : Ne peut pas dézoomer en dessous de 70%
             step: 0.1,
             contain: 'outside',
             cursor: 'grab',
             animate: true,
-            startScale: 0.5,    // Démarre avec vue d'ensemble
+            startScale: 0.9,    // Démarre à 90% (plus proche)
             startX: 0,
             startY: 0
         });
@@ -164,11 +164,12 @@ function initPanzoom() {
             }
         });
         
-        console.log('✅ Panzoom activé - Style Pop The Wall !');
+        console.log('✅ Panzoom activé - Zoom limité entre 70% et 250%');
     } else {
         console.warn('⚠️ Panzoom non disponible');
     }
 }
+
 
 
 // ============================================
