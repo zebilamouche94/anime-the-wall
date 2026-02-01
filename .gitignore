@@ -1,2 +1,24 @@
 # Created by venv; see https://docs.python.org/3/library/venv.html
 *
+# Python
+__pycache__/
+*.py[cod]
+venv/
+env/
+
+# Logs
+*.log
+download_log.json
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+*.swp
+
+# Affiches temporaires (optionnel)
+posters_original/
+assets/posters/full/
+assets/posters/thumb/
+
+# Node modules (si tu utilises npm plus tard)
+node_modules/
