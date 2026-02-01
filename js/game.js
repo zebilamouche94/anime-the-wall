@@ -4,6 +4,7 @@
 let lives = 3;
 let currentAnime = null;
 let startTime = Date.now();
+let gameStarted = false;
 
 // Configuration Fuse.js
 const fuse = new Fuse(animeData, {
@@ -29,13 +30,49 @@ function init() {
     updateStats();
     setupEventListeners();
     
+    // Vérifier si le jeu a déjà été commencé
+    if (foundAnimes.length > 0 || lives < 3) {
+        // Reprendre la partie en cours
+        startGame();
+    } else {
+        // Afficher l'écran de démarrage
+        showStartScreen();
+    }
+}
+
+// ============================================
+// ÉCRAN DE DÉMARRAGE
+// ============================================
+function showStartScreen() {
+    const startScreen = document.getElementById('start-screen');
+    const startBtn = document.getElementById('start-game-btn');
+    
+    startBtn.addEventListener('click', () => {
+        startScreen.classList.add('hidden');
+        setTimeout(() => {
+            startScreen.style.display = 'none';
+            startGame();
+        }, 600);
+    });
+}
+
+function startGame() {
+    gameStarted = true;
+    
+    // Afficher le HUD et les éléments de jeu
+    document.getElementById('hud').classList.add('visible');
+    document.getElementById('progress-container').classList.add('visible');
+    document.getElementById('progress-text').classList.add('visible');
+    document.getElementById('instructions').classList.add('visible');
+    
+    // Initialiser Panzoom après un court délai
+    setTimeout(initPanzoom, 300);
+    
+    // Réinitialiser le temps si nouvelle partie
     if (foundAnimes.length === 0) {
         startTime = Date.now();
         localStorage.setItem('animeTheWall_startTime', startTime);
     }
-    
-    // Initialiser Panzoom après un court délai
-    setTimeout(initPanzoom, 300);
 }
 
 // ============================================
@@ -214,6 +251,8 @@ function showVictory() {
     
     document.getElementById('victory-modal').classList.remove('hidden');
     
+    playSound('victory');
+    
     // Confettis
     if (typeof confetti !== 'undefined') {
         const duration = 3 * 1000;
@@ -265,6 +304,7 @@ function resetGame() {
     foundAnimes = [];
     lives = 3;
     startTime = Date.now();
+    gameStarted = false;
     
     renderGrid();
     updateStats();
@@ -273,8 +313,18 @@ function resetGame() {
     document.getElementById('victory-modal').classList.add('hidden');
     document.getElementById('gameover-modal').classList.add('hidden');
     
-    // Réinitialiser Panzoom
-    setTimeout(initPanzoom, 300);
+    // Masquer le HUD
+    document.getElementById('hud').classList.remove('visible');
+    document.getElementById('progress-container').classList.remove('visible');
+    document.getElementById('progress-text').classList.remove('visible');
+    document.getElementById('instructions').classList.remove('visible');
+    
+    // Afficher l'écran de démarrage
+    const startScreen = document.getElementById('start-screen');
+    startScreen.style.display = 'flex';
+    startScreen.classList.remove('hidden');
+    
+    showStartScreen();
 }
 
 // ============================================

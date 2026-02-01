@@ -19,11 +19,38 @@
 </head>
 <body>
     
-    <!-- Header minimaliste flottant -->
-    <header id="main-header">
-        <h1>🎌 ANIME THE WALL</h1>
-        <p class="subtitle">Explorez le mur - Trouvez les 66 animes - 3 erreurs max !</p>
-    </header>
+    <!-- ÉCRAN DE DÉMARRAGE -->
+    <div id="start-screen">
+        <div class="start-content">
+            <div class="game-logo">
+                <h1>🎌 ANIME THE WALL</h1>
+                <div class="logo-underline"></div>
+            </div>
+            
+            <p class="game-tagline">Explorez le mur d'affiches et identifiez les 66 animes</p>
+            
+            <div class="game-rules">
+                <div class="rule-item">
+                    <span class="rule-icon">🎯</span>
+                    <span>Trouvez les 66 animes</span>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">❤️</span>
+                    <span>3 erreurs maximum</span>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">🖱️</span>
+                    <span>Cliquez sur une affiche pour deviner</span>
+                </div>
+            </div>
+            
+            <button id="start-game-btn" class="btn-start">
+                ▶ COMMENCER
+            </button>
+            
+            <p class="start-footer">Glissez et zoomez pour explorer le mur</p>
+        </div>
+    </div>
 
     <!-- HUD minimaliste (coins de l'écran) -->
     <div id="hud">
