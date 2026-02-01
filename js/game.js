@@ -47,6 +47,11 @@ function init() {
     
     if (foundAnimes.length > 0 || lives < 3) {
         console.log('📦 Reprise de partie');
+                // Cacher l'écran de démarrage pour les parties en cours
+                const startScreen = document.getElementById('start-screen');
+                if (startScreen) {
+                                startScreen.style.display = 'none';
+                            }
         startGame();
     } else {
         console.log('🎬 Affichage écran démarrage');
