@@ -76,16 +76,15 @@ function startGame() {
 }
 
 // ============================================
-// GÉNÉRATION DE LA GRILLE - STYLE COLLAGE
+// GÉNÉRATION STYLE POP THE WALL - Collage chaotique
 // ============================================
 function renderGrid() {
     const grid = document.getElementById('poster-grid');
     grid.innerHTML = '';
     
-    const gridWidth = window.innerWidth;
-    const gridHeight = window.innerHeight;
-    const posterWidth = window.innerWidth > 768 ? 180 : 120;
-    const posterHeight = posterWidth * 1.5; // Ratio 2:3
+    const containerWidth = 3000;
+    const containerHeight = 2400;
+    const posterWidth = window.innerWidth > 768 ? 200 : 140;
     
     animeData.forEach((anime, index) => {
         const card = document.createElement('div');
@@ -96,28 +95,28 @@ function renderGrid() {
             card.classList.add('found');
         }
         
-        // Position aléatoire mais qui remplit l'écran
-        const cols = Math.floor(gridWidth / (posterWidth * 0.7));
+        // Position aléatoire mais répartie
+        const cols = Math.floor(containerWidth / (posterWidth * 0.65));
         const rows = Math.ceil(animeData.length / cols);
         
         const col = index % cols;
         const row = Math.floor(index / cols);
         
-        const baseX = col * (posterWidth * 0.7);
-        const baseY = row * (posterHeight * 0.7);
+        const baseX = col * (posterWidth * 0.65);
+        const baseY = row * (posterWidth * 1.0); // 1.5 ratio pour affiches verticales
         
-        // Ajouter du random pour le chaos
-        const randomX = (Math.random() - 0.5) * 80;
-        const randomY = (Math.random() - 0.5) * 80;
+        // Variation aléatoire pour chaos
+        const randomX = (Math.random() - 0.5) * 120;
+        const randomY = (Math.random() - 0.5) * 120;
         
-        const x = baseX + randomX;
-        const y = baseY + randomY;
+        const x = Math.max(0, Math.min(containerWidth - posterWidth, baseX + randomX));
+        const y = Math.max(0, Math.min(containerHeight - (posterWidth * 1.5), baseY + randomY));
         
-        // Rotation aléatoire forte
-        const rotation = (Math.random() - 0.5) * 30; // -15° à +15°
+        // Rotation aléatoire (-20° à +20°)
+        const rotation = (Math.random() - 0.5) * 40;
         
         // Z-index aléatoire pour superposition
-        const zIndex = Math.floor(Math.random() * 50);
+        const zIndex = Math.floor(Math.random() * 66);
         
         card.style.left = `${x}px`;
         card.style.top = `${y}px`;
@@ -136,8 +135,9 @@ function renderGrid() {
 }
 
 
+
 // ============================================
-// PANZOOM (Zoom/Pan interactif avec limites)
+// PANZOOM avec limites style Pop The Wall
 // ============================================
 function initPanzoom() {
     const container = document.getElementById('wall-container');
@@ -145,13 +145,13 @@ function initPanzoom() {
     
     if (element && typeof Panzoom !== 'undefined') {
         const panzoom = Panzoom(element, {
-            maxScale: 2.5,      // Zoom max
-            minScale: 1,        // IMPORTANT : Ne peut pas dézoomer en dessous de 100%
-            step: 0.15,
+            maxScale: 2,        // Zoom max
+            minScale: 0.4,      // Zoom min pour vue d'ensemble
+            step: 0.1,
             contain: 'outside',
             cursor: 'grab',
             animate: true,
-            startScale: 1,
+            startScale: 0.5,    // Démarre avec vue d'ensemble
             startX: 0,
             startY: 0
         });
@@ -164,7 +164,7 @@ function initPanzoom() {
             }
         });
         
-        console.log('✅ Panzoom activé - Zoom limité entre 100% et 250%');
+        console.log('✅ Panzoom activé - Style Pop The Wall !');
     } else {
         console.warn('⚠️ Panzoom non disponible');
     }
