@@ -43,7 +43,7 @@ function renderGrid() {
     const grid = document.getElementById('poster-grid');
     grid.innerHTML = '';
     
-    animeData.forEach(anime => {
+    animeData.forEach((anime, index) => {
         const card = document.createElement('div');
         card.className = 'poster-card';
         card.dataset.id = anime.id;
@@ -52,6 +52,25 @@ function renderGrid() {
         if (foundAnimes.includes(anime.id)) {
             card.classList.add('found');
         }
+        
+        // === RANDOMISATION VISUELLE ===
+        
+        // Taille aléatoire (certaines affiches plus grandes)
+        const sizes = ['small', 'normal', 'large'];
+        const randomSize = sizes[index % 3];
+        card.classList.add(randomSize);
+        
+        // Rotation aléatoire légère
+        const rotation = (Math.random() * 8 - 4); // Entre -4° et +4°
+        card.style.setProperty('--rotation', `${rotation}deg`);
+        
+        // Décalage vertical aléatoire
+        const offsetY = (Math.random() * 20 - 10); // Entre -10px et +10px
+        card.style.setProperty('--offset-y', `${offsetY}px`);
+        
+        // Z-index aléatoire pour superposition
+        const zIndex = Math.floor(Math.random() * 10);
+        card.style.zIndex = zIndex;
         
         const img = document.createElement('img');
         img.src = `assets/posters/${anime.poster}`;
@@ -62,7 +81,15 @@ function renderGrid() {
         card.addEventListener('click', () => openModal(anime));
         grid.appendChild(card);
     });
+    // Occultation partielle aléatoire (30% des affiches)
+if (Math.random() > 0.7 && !foundAnimes.includes(anime.id)) {
+    const obscureTypes = ['obscured-top', 'obscured-bottom', 'obscured-left', 'obscured-right'];
+    const randomObscure = obscureTypes[Math.floor(Math.random() * obscureTypes.length)];
+    card.classList.add('obscured', randomObscure);
 }
+
+}
+
 
 // ============================================
 // GESTION DE LA MODALE
@@ -293,6 +320,17 @@ function playSound(type) {
 // EVENT LISTENERS
 // ============================================
 function setupEventListeners() {
+    // Mode difficile toggle
+const hardModeBtn = document.getElementById('hard-mode-toggle');
+if (hardModeBtn) {
+    hardModeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('hard-mode');
+        hardModeBtn.textContent = document.body.classList.contains('hard-mode') 
+            ? '😵 Mode Normal' 
+            : '😎 Mode Difficile';
+    });
+}
+
     // Validation
     document.getElementById('submit-btn').addEventListener('click', validateAnswer);
     
@@ -347,6 +385,17 @@ document.getElementById('theme-toggle').addEventListener('click', () => {
     localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
 });
 
+// Effet parallaxe léger au scroll
+window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const posters = document.querySelectorAll('.poster-card');
+    
+    posters.forEach((poster, index) => {
+        const speed = (index % 5) * 0.05; // Vitesse différente par carte
+        const yPos = scrolled * speed;
+        poster.style.transform = `translateY(${yPos}px) rotate(var(--rotation, 0deg))`;
+    });
+});
 
 
 // ============================================

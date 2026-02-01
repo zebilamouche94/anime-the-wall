@@ -22,20 +22,17 @@
 }
 
 body {
-    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: linear-gradient(
-        -45deg,
-        #667eea,
-        #764ba2,
-        #f093fb,
-        #4facfe
-    );
-    background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
+    font-family: 'Poppins', sans-serif;
+    background: 
+        /* Texture papier */
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="noise"><feTurbulence baseFrequency="0.9" /></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.05"/></svg>'),
+        /* Gradient de base */
+        linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
     min-height: 100vh;
     color: var(--text);
     overflow-x: hidden;
 }
+
 
 @keyframes gradientShift {
     0% { background-position: 0% 50%; }
@@ -129,9 +126,115 @@ main {
 }
 
 #poster-grid {
+    /* ============================================
+   GRILLE STYLE MUR D'AFFICHES
+   ============================================ */
+#poster-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0; /* Pas de gap, elles vont se chevaucher */
+    padding: 20px;
+    position: relative;
+    perspective: 1000px; /* Pour l'effet 3D */
+}
+
+.poster-card {
+    position: relative;
+    aspect-ratio: 2/3;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    
+    /* Rotation aléatoire simulée avec nth-child */
+    transform: rotate(0deg);
+}
+
+/* Rotations variées pour effet "collé au hasard" */
+.poster-card:nth-child(6n+1) { transform: rotate(-3deg) translateY(-5px); }
+.poster-card:nth-child(6n+2) { transform: rotate(2deg) translateY(3px); }
+.poster-card:nth-child(6n+3) { transform: rotate(-1deg) translateY(-2px); }
+.poster-card:nth-child(6n+4) { transform: rotate(4deg) translateY(5px); }
+.poster-card:nth-child(6n+5) { transform: rotate(-2deg) translateY(-3px); }
+.poster-card:nth-child(6n+6) { transform: rotate(1deg) translateY(2px); }
+
+/* Effet scotch/punaise en haut */
+.poster-card::before {
+    content: '📌';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.5rem;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.poster-card:hover::before {
+    opacity: 1;
+}
+
+/* Image avec ombre portée */
+.poster-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 
+        0 4px 8px rgba(0,0,0,0.3),
+        0 8px 16px rgba(0,0,0,0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Au survol : l'affiche se décolle et grandit */
+.poster-card:hover {
+    transform: rotate(0deg) translateY(-20px) scale(1.15);
+    z-index: 100;
+    box-shadow: 
+        0 20px 40px rgba(0,0,0,0.5),
+        0 30px 60px rgba(0,0,0,0.3);
+}
+
+.poster-card:hover img {
+    transform: scale(1.05);
+}
+
+/* État trouvé : épinglé bien droit */
+.poster-card.found {
+    transform: rotate(0deg) !important;
+    opacity: 0.6;
+    filter: grayscale(50%);
+}
+
+.poster-card.found::after {
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    color: #51cf66;
+    text-shadow: 
+        2px 2px 4px rgba(0,0,0,0.8),
+        0 0 20px rgba(81, 207, 102, 0.6);
+    z-index: 10;
+    animation: checkmarkPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes checkmarkPop {
+    0% {
+        transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+        opacity: 0;
+    }
+    60% {
+        transform: translate(-50%, -50%) scale(1.3) rotate(10deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
 }
 
 .poster-card {
@@ -209,6 +312,69 @@ main {
         transform: translate(-50%, -50%) scale(1) rotate(0deg);
         opacity: 1;
     }
+}
+/* Tailles variées */
+.poster-card.small {
+    transform: scale(0.85) rotate(var(--rotation, 0deg)) translateY(var(--offset-y, 0));
+}
+
+.poster-card.normal {
+    transform: scale(1) rotate(var(--rotation, 0deg)) translateY(var(--offset-y, 0));
+}
+
+.poster-card.large {
+    transform: scale(1.15) rotate(var(--rotation, 0deg)) translateY(var(--offset-y, 0));
+    grid-column: span 1; /* Peut prendre plus de place */
+}
+
+.poster-card.large:hover {
+    transform: scale(1.3) rotate(0deg) translateY(-25px);
+}
+/* Affiches avec zones cachées */
+.poster-card.obscured::after {
+    content: '';
+    position: absolute;
+    background: var(--dark);
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Variantes d'occultation */
+.poster-card.obscured-top::after {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(to bottom, var(--dark), transparent);
+}
+
+.poster-card.obscured-bottom::after {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(to top, var(--dark), transparent);
+}
+
+.poster-card.obscured-left::after {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 35%;
+    background: linear-gradient(to right, var(--dark), transparent);
+}
+
+.poster-card.obscured-right::after {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 35%;
+    background: linear-gradient(to left, var(--dark), transparent);
+}
+
+/* Au survol, révèle l'affiche complète */
+.poster-card:hover.obscured::after {
+    opacity: 0;
 }
 
 /* ============================================
@@ -536,6 +702,14 @@ footer a:hover {
     --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --bg-card: #1a1a2e;
     --text-color: #ffffff;
+}
+/* Mode difficile : toutes les affiches sont partiellement cachées */
+body.hard-mode .poster-card:not(.found) {
+    filter: blur(2px) brightness(0.7);
+}
+
+body.hard-mode .poster-card:not(.found):hover {
+    filter: blur(0) brightness(1);
 }
 
 /* Thème clair */
