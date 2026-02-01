@@ -445,7 +445,7 @@ function setupEventListeners() {
         restartBtn.addEventListener('click', resetGame);
     }
     
-    const retryBtn = document.getElementById('retry-btn
+    
     
     const retryBtn = document.getElementById('retry-btn');
     if (retryBtn) {
