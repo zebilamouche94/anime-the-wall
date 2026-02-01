@@ -3,56 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anime The Wall - Trouvez les 66 Animes</title>
-    <meta name="description" content="Défi ultime pour fans d'anime : identifiez 66 séries à partir de leurs affiches. 3 vies, 1 objectif !">
-    
-    <!-- Google Fonts -->
+    <title>Anime The Wall</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    
-    <!-- Fuse.js pour la recherche floue -->
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
 </head>
 <body>
     
-    <!-- ÉCRAN DE DÉMARRAGE -->
+    <!-- TOUT TON HTML ICI -->
     <div id="start-screen">
         <div class="start-content">
             <div class="game-logo">
                 <h1>🎌 ANIME THE WALL</h1>
                 <div class="logo-underline"></div>
             </div>
-            
             <p class="game-tagline">Explorez le mur d'affiches et identifiez les 66 animes</p>
-            
             <div class="game-rules">
-                <div class="rule-item">
-                    <span class="rule-icon">🎯</span>
-                    <span>Trouvez les 66 animes</span>
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">❤️</span>
-                    <span>3 erreurs maximum</span>
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">🖱️</span>
-                    <span>Cliquez sur une affiche pour deviner</span>
-                </div>
+                <div class="rule-item"><span class="rule-icon">🎯</span><span>Trouvez les 66 animes</span></div>
+                <div class="rule-item"><span class="rule-icon">❤️</span><span>3 erreurs maximum</span></div>
+                <div class="rule-item"><span class="rule-icon">🖱️</span><span>Cliquez sur une affiche pour deviner</span></div>
             </div>
-            
-            <button id="start-game-btn" class="btn-start">
-                ▶ COMMENCER
-            </button>
-            
+            <button id="start-game-btn" class="btn-start">▶ COMMENCER</button>
             <p class="start-footer">Glissez et zoomez pour explorer le mur</p>
         </div>
     </div>
 
-    <!-- HUD minimaliste (coins de l'écran) -->
     <div id="hud">
         <div class="hud-left">
             <div class="stat">
@@ -65,69 +41,50 @@
                 <span id="lives">❤️❤️❤️</span>
             </div>
         </div>
-        
         <div class="hud-right">
             <button id="reset-btn" class="btn-secondary">🔄</button>
-            <button id="theme-toggle" class="btn-secondary" title="Changer de thème">🌙</button>
+            <button id="theme-toggle" class="btn-secondary">🌙</button>
         </div>
     </div>
 
-    <!-- Barre de progression (en bas) -->
-    <div id="progress-container">
-        <div id="progress-bar"></div>
-    </div>
+    <div id="progress-container"><div id="progress-bar"></div></div>
     <div id="progress-text">0%</div>
 
-    <!-- Grille des affiches avec zoom/pan -->
     <main id="wall-container">
         <div id="zoom-container">
             <div id="poster-grid"></div>
         </div>
     </main>
 
-    <!-- Instructions flottantes -->
-    <div id="instructions">
-        🖱️ Cliquez et glissez pour explorer | 🔍 Molette pour zoomer
-    </div>
+    <div id="instructions">🖱️ Cliquez et glissez pour explorer | 🔍 Molette pour zoomer</div>
 
-    <!-- Modale de saisie -->
     <div id="modal" class="hidden">
         <div class="modal-backdrop"></div>
         <div class="modal-content">
-            <button id="close-modal" class="close-btn" aria-label="Fermer">✕</button>
-            
+            <button id="close-modal" class="close-btn">✕</button>
             <div class="modal-poster-container">
                 <img id="modal-poster" src="" alt="Affiche anime">
             </div>
-            
             <div class="modal-form">
                 <label for="guess-input">Quel anime est-ce ?</label>
-                <input 
-                    type="text" 
-                    id="guess-input" 
-                    placeholder="Tapez le nom..." 
-                    autocomplete="off"
-                    spellcheck="false"
-                >
+                <input type="text" id="guess-input" placeholder="Tapez le nom..." autocomplete="off">
                 <button id="submit-btn" class="btn-primary">✓ Valider</button>
                 <div id="error-msg" class="hidden">❌ Mauvaise réponse !</div>
             </div>
         </div>
     </div>
 
-    <!-- Modale de victoire -->
     <div id="victory-modal" class="hidden">
         <div class="modal-backdrop"></div>
         <div class="modal-content victory-content">
             <h2>🎉 BRAVO !</h2>
             <p>Tu as trouvé les <strong>66 animes</strong> !</p>
             <div id="completion-time"></div>
-            <button id="share-btn" class="btn-primary">📱 Partager mon score</button>
+            <button id="share-btn" class="btn-primary">📱 Partager</button>
             <button id="restart-btn" class="btn-secondary">🔄 Rejouer</button>
         </div>
     </div>
 
-    <!-- Modale Game Over -->
     <div id="gameover-modal" class="hidden">
         <div class="modal-backdrop"></div>
         <div class="modal-content gameover-content">
@@ -137,12 +94,10 @@
         </div>
     </div>
 
-    <!-- Footer discret -->
-    <footer>
-        <p>Créé avec ❤️ pour les fans d'anime</p>
-    </footer>
+    <footer><p>Créé avec ❤️ pour les fans d'anime</p></footer>
 
-    <!-- Scripts -->
+    <!-- SCRIPTS EN BAS AVANT </body> -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
     <script src="js/data.js"></script>
