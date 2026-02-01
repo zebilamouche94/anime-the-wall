@@ -78,13 +78,16 @@ function startGame() {
 // ============================================
 // GÉNÉRATION STYLE POP THE WALL - Collage chaotique
 // ============================================
+// ============================================
+// GÉNÉRATION STYLE POP THE WALL - Morceaux découpés
+// ============================================
 function renderGrid() {
     const grid = document.getElementById('poster-grid');
     grid.innerHTML = '';
     
     const containerWidth = 3000;
     const containerHeight = 2400;
-    const posterWidth = window.innerWidth > 768 ? 200 : 140;
+    const fragmentSize = window.innerWidth > 768 ? 200 : 140;
     
     animeData.forEach((anime, index) => {
         const card = document.createElement('div');
@@ -95,44 +98,58 @@ function renderGrid() {
             card.classList.add('found');
         }
         
-        // Position aléatoire mais répartie
-        const cols = Math.floor(containerWidth / (posterWidth * 0.65));
+        // Position aléatoire du fragment dans le mur
+        const cols = Math.floor(containerWidth / (fragmentSize * 0.65));
         const rows = Math.ceil(animeData.length / cols);
         
         const col = index % cols;
         const row = Math.floor(index / cols);
         
-        const baseX = col * (posterWidth * 0.65);
-        const baseY = row * (posterWidth * 1.0); // 1.5 ratio pour affiches verticales
+        const baseX = col * (fragmentSize * 0.65);
+        const baseY = row * (fragmentSize * 1.0);
         
-        // Variation aléatoire pour chaos
         const randomX = (Math.random() - 0.5) * 120;
         const randomY = (Math.random() - 0.5) * 120;
         
-        const x = Math.max(0, Math.min(containerWidth - posterWidth, baseX + randomX));
-        const y = Math.max(0, Math.min(containerHeight - (posterWidth * 1.5), baseY + randomY));
+        const x = Math.max(0, Math.min(containerWidth - fragmentSize, baseX + randomX));
+        const y = Math.max(0, Math.min(containerHeight - (fragmentSize * 1.5), baseY + randomY));
         
-        // Rotation aléatoire (-20° à +20°)
+        // Rotation aléatoire
         const rotation = (Math.random() - 0.5) * 40;
         
-        // Z-index aléatoire pour superposition
+        // Z-index aléatoire
         const zIndex = Math.floor(Math.random() * 66);
         
         card.style.left = `${x}px`;
         card.style.top = `${y}px`;
         card.style.transform = `rotate(${rotation}deg)`;
         card.style.zIndex = zIndex;
+        card.style.width = `${fragmentSize}px`;
+        card.style.height = `${fragmentSize}px`;
         
+        // IMAGE avec découpage aléatoire
         const img = document.createElement('img');
         img.src = `assets/posters/${anime.poster}`;
         img.alt = `Affiche ${anime.id}`;
         img.loading = 'lazy';
+        
+        // DÉCOUPAGE : Prendre un morceau aléatoire de l'affiche
+        // Zone centrale (20-80%) pour éviter le texte en haut/bas
+        const cropX = 10 + Math.random() * 40; // 10% à 50% depuis la gauche
+        const cropY = 20 + Math.random() * 40; // 20% à 60% depuis le haut (évite titres)
+        
+        // L'image affiche seulement une portion (object-position)
+        img.style.width = '400%'; // 4x plus grande
+        img.style.height = '400%';
+        img.style.objectFit = 'cover';
+        img.style.objectPosition = `${cropX}% ${cropY}%`;
         
         card.appendChild(img);
         card.addEventListener('click', () => openModal(anime));
         grid.appendChild(card);
     });
 }
+
 
 
 
