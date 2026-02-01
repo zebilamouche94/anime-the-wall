@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime The Wall - Trouvez les 66 Animes</title>
+    <meta name="description" content="Défi ultime pour fans d'anime : identifiez 66 séries à partir de leurs affiches. 3 vies, 1 objectif !">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Fuse.js pour la recherche floue -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+</head>
+<body>
+    
+    <!-- Header avec titre -->
+    <header id="main-header">
+        <h1>🎌 ANIME THE WALL</h1>
+        <p class="subtitle">Trouvez les 66 animes - 3 erreurs max !</p>
+    </header>
+
+    <!-- HUD (Score + Vies) -->
+    <div id="hud">
+        <div class="stat">
+            <span class="label">Trouvés:</span>
+            <span id="score" class="value">0</span>
+            <span class="total">/66</span>
+        </div>
+        <div class="stat lives-stat">
+            <span class="label">Vies:</span>
+            <span id="lives">❤️❤️❤️</span>
+        </div>
+        <button id="reset-btn" class="btn-secondary">🔄 Recommencer</button>
+    </div>
+
+    <!-- Grille des affiches -->
+    <main>
+        <div id="poster-grid"></div>
+    </main>
+
+    <!-- Modale de saisie -->
+    <div id="modal" class="hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button id="close-modal" class="close-btn" aria-label="Fermer">✕</button>
+            
+            <div class="modal-poster-container">
+                <img id="modal-poster" src="" alt="Affiche anime">
+            </div>
+            
+            <div class="modal-form">
+                <label for="guess-input">Quel anime est-ce ?</label>
+                <input 
+                    type="text" 
+                    id="guess-input" 
+                    placeholder="Tapez le nom..." 
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+                <button id="submit-btn" class="btn-primary">✓ Valider</button>
+                <div id="error-msg" class="hidden">❌ Mauvaise réponse !</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale de victoire -->
+    <div id="victory-modal" class="hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content victory-content">
+            <h2>🎉 BRAVO !</h2>
+            <p>Tu as trouvé les <strong>66 animes</strong> !</p>
+            <div id="completion-time"></div>
+            <button id="share-btn" class="btn-primary">📱 Partager mon score</button>
+            <button id="restart-btn" class="btn-secondary">🔄 Rejouer</button>
+        </div>
+    </div>
+
+    <!-- Modale Game Over -->
+    <div id="gameover-modal" class="hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content gameover-content">
+            <h2>💀 GAME OVER</h2>
+            <p>Tu as trouvé <strong id="final-score">0</strong>/66 animes</p>
+            <button id="retry-btn" class="btn-primary">🔄 Réessayer</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Créé avec ❤️ pour les fans d'anime</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>
