@@ -11,20 +11,26 @@ let savedStartTime = parseInt(localStorage.getItem('animeTheWall_startTime') || 
 lives = savedLives;
 startTime = savedStartTime;
 
-// Attendre que le DOM soit chargé
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🎮 DOM chargé, initialisation...');
+// ATTENDRE QUE TOUT SOIT CHARGÉ
+window.onload = function() {
+    console.log('🎮 Window loaded, initialisation...');
     init();
-});
+};
 
 function init() {
     console.log('🚀 Init appelé');
     
+    // Vérifier que le bouton existe
+    const startBtn = document.getElementById('start-game-btn');
+    console.log('🔍 Bouton trouvé:', startBtn);
+    
     if (typeof animeData === 'undefined') {
         console.error('❌ animeData non trouvé !');
-        setTimeout(init, 100);
         return;
     }
+    
+    // ... reste du code
+
     
     console.log('✅ animeData trouvé:', animeData.length, 'animes');
     
