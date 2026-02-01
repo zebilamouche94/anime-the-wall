@@ -162,8 +162,22 @@ function handleWrong() {
 // MISE À JOUR DES STATS
 // ============================================
 function updateStats() {
+    function updateStats() {
     document.getElementById('score').textContent = foundAnimes.length;
     document.getElementById('lives').textContent = '❤️'.repeat(Math.max(0, lives));
+    
+    // Animation du score
+    document.getElementById('score').classList.add('score-update');
+    setTimeout(() => {
+        document.getElementById('score').classList.remove('score-update');
+    }, 500);
+    
+    // Barre de progression
+    const progress = (foundAnimes.length / animeData.length) * 100;
+    document.getElementById('progress-bar').style.width = progress + '%';
+    document.getElementById('progress-text').textContent = Math.round(progress) + '%';
+}
+
 }
 
 // ============================================
@@ -180,7 +194,33 @@ function showVictory() {
         `Temps : ${minutes}min ${seconds}s`;
     
     document.getElementById('victory-modal').classList.remove('hidden');
+    
+    // 🎉 CONFETTIS !
+    const duration = 3 * 1000;
+    const end = Date.now() + duration;
+
+    (function frame() {
+        confetti({
+            particleCount: 7,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: ['#ff6b6b', '#51cf66', '#667eea', '#ffd93d']
+        });
+        confetti({
+            particleCount: 7,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: ['#ff6b6b', '#51cf66', '#667eea', '#ffd93d']
+        });
+
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+    }());
 }
+
 
 // ============================================
 // AFFICHAGE GAME OVER
@@ -277,6 +317,20 @@ function setupEventListeners() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();
     });
+}
+document.getElementById('theme-toggle').addEventListener('click', () => {
+    document.body.classList.toggle('light-theme');
+    const btn = document.getElementById('theme-toggle');
+    btn.textContent = document.body.classList.contains('light-theme') ? '☀️' : '🌙';
+    
+    // Sauvegarder la préférence
+    localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+});
+
+// Charger le thème au démarrage
+if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light-theme');
+    document.getElementById('theme-toggle').textContent = '☀️';
 }
 
 // ============================================
