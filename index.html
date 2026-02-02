@@ -4,41 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anime The Wall</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    
-    <!-- TOUT TON HTML ICI -->
+    <!-- Écran de démarrage -->
     <div id="start-screen">
         <div class="start-content">
-            <div class="game-logo">
-                <h1>🎌 ANIME THE WALL</h1>
-                <div class="logo-underline"></div>
-            </div>
-            <p class="game-tagline">Explorez le mur d'affiches et identifiez les 66 animes</p>
+            <h1>🎌 ANIME THE WALL</h1>
+            <p>Explorez le mur d'affiches et identifiez les 100 animes</p>
+            
             <div class="game-rules">
-                <div class="rule-item"><span class="rule-icon">🎯</span><span>Trouvez les 66 animes</span></div>
-                <div class="rule-item"><span class="rule-icon">❤️</span><span>3 erreurs maximum</span></div>
-                <div class="rule-item"><span class="rule-icon">🖱️</span><span>Cliquez sur une affiche pour deviner</span></div>
+                <div>🎯 Trouvez les 100 animes</div>
+                <div>❤️ 3 erreurs maximum</div>
+                <div>🖱️ Cliquez sur une affiche pour deviner</div>
             </div>
+            
             <button id="start-game-btn" class="btn-start">▶ COMMENCER</button>
             <p class="start-footer">Glissez et zoomez pour explorer le mur</p>
         </div>
     </div>
 
+    <!-- HUD -->
     <div id="hud">
         <div class="hud-left">
             <div class="stat">
                 <span class="label">Trouvés:</span>
                 <span id="score" class="value">0</span>
-                <span class="total">/66</span>
+                <span class="total">/100</span>
             </div>
             <div class="stat lives-stat">
                 <span class="label">Vies:</span>
-                <span id="lives">❤️❤️❤️</span>
+                <span id="lives" class="value">❤️❤️❤️</span>
             </div>
         </div>
         <div class="hud-right">
@@ -47,17 +43,28 @@
         </div>
     </div>
 
-    <div id="progress-container"><div id="progress-bar"></div></div>
+    <!-- Barre de progression -->
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
     <div id="progress-text">0%</div>
 
+    <!-- Conteneur principal du mur -->
     <main id="wall-container">
         <div id="zoom-container">
-            <div id="poster-grid"></div>
+            <img id="wall-image" 
+                 src="assets/anime-wall-complete.jpg" 
+                 alt="Mur d'affiches anime"
+                 draggable="false">
         </div>
     </main>
 
-    <div id="instructions">🖱️ Cliquez et glissez pour explorer | 🔍 Molette pour zoomer</div>
+    <!-- Instructions -->
+    <div id="instructions">
+        🖱️ Cliquez et glissez pour explorer | 🔍 Molette pour zoomer
+    </div>
 
+    <!-- Modal de devinette -->
     <div id="modal" class="hidden">
         <div class="modal-backdrop"></div>
         <div class="modal-content">
@@ -67,39 +74,46 @@
             </div>
             <div class="modal-form">
                 <label for="guess-input">Quel anime est-ce ?</label>
-                <input type="text" id="guess-input" placeholder="Tapez le nom..." autocomplete="off">
+                <input type="text" 
+                       id="guess-input" 
+                       placeholder="Tapez le nom..." 
+                       autocomplete="off">
                 <button id="submit-btn" class="btn-primary">✓ Valider</button>
                 <div id="error-msg" class="hidden">❌ Mauvaise réponse !</div>
             </div>
         </div>
     </div>
 
+    <!-- Modal de victoire -->
     <div id="victory-modal" class="hidden">
         <div class="modal-backdrop"></div>
         <div class="modal-content victory-content">
             <h2>🎉 BRAVO !</h2>
-            <p>Tu as trouvé les <strong>66 animes</strong> !</p>
+            <p>Tu as trouvé les <strong>100 animes</strong> !</p>
             <div id="completion-time"></div>
-            <button id="share-btn" class="btn-primary">📱 Partager</button>
+            <button id="share-btn" class="btn-primary">📤 Partager</button>
             <button id="restart-btn" class="btn-secondary">🔄 Rejouer</button>
         </div>
     </div>
 
+    <!-- Modal de game over -->
     <div id="gameover-modal" class="hidden">
         <div class="modal-backdrop"></div>
         <div class="modal-content gameover-content">
             <h2>💀 GAME OVER</h2>
-            <p>Tu as trouvé <strong id="final-score">0</strong>/66 animes</p>
+            <p>Tu as trouvé <strong id="final-score">0</strong>/100 animes</p>
             <button id="retry-btn" class="btn-primary">🔄 Réessayer</button>
         </div>
     </div>
 
-    <footer><p>Créé avec ❤️ pour les fans d'anime</p></footer>
+    <footer>
+        <p>Créé avec ❤️ pour les fans d'anime</p>
+    </footer>
 
-    <!-- SCRIPTS EN BAS AVANT </body> -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
     <script src="js/data.js"></script>
     <script src="js/game.js"></script>
 </body>

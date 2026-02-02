@@ -1,0 +1,222 @@
+[
+  {
+    "id": 1,
+    "title": "One Piece",
+    "x": 89,
+    "y": 194,
+    "width": 334,
+    "height": 457,
+    "rotation": 4,
+    "centerX": 256,
+    "centerY": 422
+  },
+  {
+    "id": 2,
+    "title": "Demon Slayer",
+    "x": 803,
+    "y": 276,
+    "width": 373,
+    "height": 483,
+    "rotation": 9,
+    "centerX": 989,
+    "centerY": 517
+  },
+  {
+    "id": 3,
+    "title": "Slam Dunk",
+    "x": 1326,
+    "y": 243,
+    "width": 325,
+    "height": 446,
+    "rotation": -3,
+    "centerX": 1488,
+    "centerY": 466
+  },
+  {
+    "id": 4,
+    "title": "Detective Conan",
+    "x": 1921,
+    "y": 259,
+    "width": 365,
+    "height": 468,
+    "rotation": -10,
+    "centerX": 2103,
+    "centerY": 493
+  },
+  {
+    "id": 5,
+    "title": "Dragon Ball",
+    "x": 2593,
+    "y": 154,
+    "width": 321,
+    "height": 436,
+    "rotation": -4,
+    "centerX": 2753,
+    "centerY": 372
+  },
+  {
+    "id": 6,
+    "title": "Attack on Titan",
+    "x": 3179,
+    "y": 278,
+    "width": 321,
+    "height": 419,
+    "rotation": 8,
+    "centerX": 3339,
+    "centerY": 487
+  },
+  {
+    "id": 7,
+    "title": "Naruto",
+    "x": 3809,
+    "y": 250,
+    "width": 319,
+    "height": 403,
+    "rotation": 11,
+    "centerX": 3968,
+    "centerY": 451
+  },
+  {
+    "id": 8,
+    "title": "Haikyu!!",
+    "x": 4379,
+    "y": 128,
+    "width": 375,
+    "height": 450,
+    "rotation": -18,
+    "centerX": 4566,
+    "centerY": 353
+  },
+  {
+    "id": 9,
+    "title": "Fullmetal Alchemist",
+    "x": 4992,
+    "y": 210,
+    "width": 356,
+    "height": 425,
+    "rotation": 19,
+    "centerX": 5170,
+    "centerY": 422
+  },
+  {
+    "id": 10,
+    "title": "Hunter x Hunter",
+    "x": 5606,
+    "y": 174,
+    "width": 383,
+    "height": 475,
+    "rotation": 14,
+    "centerX": 5797,
+    "centerY": 411
+  },
+  {
+    "id": 11,
+    "title": "Bleach",
+    "x": 206,
+    "y": 1042,
+    "width": 317,
+    "height": 419,
+    "rotation": -7,
+    "centerX": 364,
+    "centerY": 1251
+  },
+  {
+    "id": 12,
+    "title": "Death Note",
+    "x": 790,
+    "y": 945,
+    "width": 341,
+    "height": 434,
+    "rotation": -11,
+    "centerX": 960,
+    "centerY": 1162
+  },
+  {
+    "id": 13,
+    "title": "Gintama",
+    "x": 1300,
+    "y": 1047,
+    "width": 406,
+    "height": 480,
+    "rotation": -20,
+    "centerX": 1503,
+    "centerY": 1287
+  },
+  {
+    "id": 14,
+    "title": "Kingdom",
+    "x": 2007,
+    "y": 965,
+    "width": 396,
+    "height": 474,
+    "rotation": 18,
+    "centerX": 2205,
+    "centerY": 1202
+  },
+  {
+    "id": 15,
+    "title": "My Hero Academia",
+    "x": 2516,
+    "y": 982,
+    "width": 344,
+    "height": 441,
+    "rotation": 10,
+    "centerX": 2688,
+    "centerY": 1202
+  },
+  {
+    "id": 16,
+    "title": "Jujutsu Kaisen",
+    "x": 3109,
+    "y": 1072,
+    "width": 314,
+    "height": 429,
+    "rotation": 4,
+    "centerX": 3266,
+    "centerY": 1286
+  },
+  {
+    "id": 17,
+    "title": "Tokyo Ghoul",
+    "x": 3789,
+    "y": 998,
+    "width": 303,
+    "height": 417,
+    "rotation": -3,
+    "centerX": 3940,
+    "centerY": 1206
+  },
+  {
+    "id": 18,
+    "title": "Chainsaw Man",
+    "x": 4402,
+    "y": 944,
+    "width": 313,
+    "height": 442,
+    "rotation": -1,
+    "centerX": 4558,
+    "centerY": 1165
+  },
+  {
+    "id": 19,
+    "title": "The Promised Neverland",
+    "x": 5010,
+    "y": 958,
+    "width": 392,
+    "height": 493,
+    "rotation": 12,
+    "centerX": 5206,
+    "centerY": 1204
+  },
+  {
+    "id": 20,
+    "title": "One Punch Man",
+    "x": 5630,
+    "y": 1060,
+    "width": 297,
+    "height": 391,
+    "rotation": -7,
+    "centerX": 5778,
+    "centerY": 1255
+  }
+]
