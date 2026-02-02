@@ -29,9 +29,6 @@ function init() {
         return;
     }
     
-    // ... reste du code
-
-    
     console.log('✅ animeData trouvé:', animeData.length, 'animes');
     
     fuse = new Fuse(animeData, {
@@ -45,14 +42,15 @@ function init() {
     updateStats();
     setupEventListeners();
     
-        if (foundAnimes.length > 0 || lives < 3) {
+    if (foundAnimes.length > 0 || lives < 3) {
         console.log('📦 Reprise de partie');
         // Cacher l'écran de démarrage et démarrer directement
         const startScreen = document.getElementById('start-screen');
         if (startScreen) {
             startScreen.style.display = 'none';
         }
-        startGame();} else {
+        startGame();
+    } else {
         console.log('🎬 Affichage écran démarrage');
         setupStartButton();
     }
@@ -117,9 +115,6 @@ function startGame() {
 }
 
 function renderGrid() {
-    const containerWidth = wallContainer.offsetWidth;
-const containerHeight = wallContainer.offsetHeight;
-
     console.log('🖼️ Génération de la grille');
     const grid = document.getElementById('poster-grid');
     if (!grid) {
@@ -128,7 +123,13 @@ const containerHeight = wallContainer.offsetHeight;
     }
     
     grid.innerHTML = '';
-const containerHeight = 6000;    const fragmentSize = 200;
+    
+    // ✅ CORRECTION ICI
+    const wallContainer = document.getElementById('zoom-container');
+    const containerWidth = wallContainer ? wallContainer.offsetWidth : 5000;
+    const containerHeight = 6000;
+    const fragmentSize = 200;
+
     
     animeData.forEach((anime, index) => {
         const card = document.createElement('div');
@@ -142,12 +143,16 @@ const containerHeight = 6000;    const fragmentSize = 200;
         const cols = Math.floor(containerWidth / (fragmentSize * 0.65));
         const col = index % cols;
         const row = Math.floor(index / cols);
+        
         const baseX = col * (fragmentSize * 0.65);
         const baseY = row * fragmentSize;
+        
         const randomX = (Math.random() - 0.5) * 120;
         const randomY = (Math.random() - 0.5) * 120;
+        
         const x = Math.max(0, Math.min(containerWidth - fragmentSize, baseX + randomX));
         const y = Math.max(0, Math.min(containerHeight - fragmentSize, baseY + randomY));
+        
         const rotation = (Math.random() - 0.5) * 40;
         const zIndex = Math.floor(Math.random() * 66);
         
@@ -171,9 +176,11 @@ const containerHeight = 6000;    const fragmentSize = 200;
         img.style.objectPosition = cropX + '% ' + cropY + '%';
         
         card.appendChild(img);
+        
         card.addEventListener('click', function() {
             openModal(anime);
         });
+        
         grid.appendChild(card);
     });
     
@@ -211,6 +218,7 @@ function initPanzoom() {
 
 function openModal(anime) {
     if (foundAnimes.includes(anime.id)) return;
+    
     currentAnime = anime;
     document.getElementById('modal-poster').src = 'assets/posters/' + anime.poster;
     document.getElementById('modal').classList.remove('hidden');
@@ -226,6 +234,7 @@ function closeModal() {
 
 function validateAnswer() {
     const guess = document.getElementById('guess-input').value.trim();
+    
     if (!guess || guess.length < 2) return;
     
     const results = fuse.search(guess);
@@ -251,6 +260,7 @@ function validateAnswer() {
         updateStats();
         
         document.getElementById('error-msg').classList.remove('hidden');
+        
         const modalContent = document.querySelector('.modal-content');
         if (modalContent) {
             modalContent.classList.add('shake');
@@ -260,6 +270,7 @@ function validateAnswer() {
         }
         
         playSound('wrong');
+        
         document.getElementById('guess-input').value = '';
         document.getElementById('guess-input').focus();
         
@@ -280,19 +291,36 @@ function updateStats() {
 
 function showVictory() {
     closeModal();
+    
     const elapsedTime = Date.now() - startTime;
     const minutes = Math.floor(elapsedTime / 60000);
     const seconds = Math.floor((elapsedTime % 60000) / 1000);
+    
     document.getElementById('completion-time').textContent = 'Temps : ' + minutes + 'min ' + seconds + 's';
     document.getElementById('victory-modal').classList.remove('hidden');
+    
     playSound('victory');
     
     if (typeof confetti !== 'undefined') {
         const duration = 3000;
         const end = Date.now() + duration;
+        
         (function frame() {
-            confetti({particleCount: 7, angle: 60, spread: 55, origin: {x: 0}, colors: ['#ff6b6b', '#51cf66', '#667eea', '#ffd93d']});
-            confetti({particleCount: 7, angle: 120, spread: 55, origin: {x: 1}, colors: ['#ff6b6b', '#51cf66', '#667eea', '#ffd93d']});
+            confetti({
+                particleCount: 7,
+                angle: 60,
+                spread: 55,
+                origin: {x: 0},
+                colors: ['#ff6b6b', '#51cf66', '#667eea', '#ffd93d']
+            });
+            confetti({
+                particleCount: 7,
+                angle: 120,
+                spread: 55,
+                origin: {x: 1},
+                colors: ['#ff6b6b', '#51cf66', '#667eea', '#ffd93d']
+            });
+            
             if (Date.now() < end) requestAnimationFrame(frame);
         }());
     }
@@ -339,8 +367,13 @@ function resetGame() {
 function shareScore() {
     const text = "J'ai trouvé les 66 animes sur Anime The Wall ! 🎌\n";
     const url = window.location.href;
+    
     if (navigator.share) {
-        navigator.share({title: 'Anime The Wall', text: text, url: url});
+        navigator.share({
+            title: 'Anime The Wall',
+            text: text,
+            url: url
+        });
     } else {
         navigator.clipboard.writeText(text + url);
         alert('Lien copié !');
@@ -398,7 +431,7 @@ function setupEventListeners() {
         shareBtn.addEventListener('click', shareScore);
     }
     
-    document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') closeModal();
     });
     
@@ -416,3 +449,5 @@ function setupEventListeners() {
         }
     }
 }
+
+
