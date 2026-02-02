@@ -113,6 +113,9 @@ function startGame() {
 }
 
 function renderGrid() {
+    const containerWidth = wallContainer.offsetWidth;
+const containerHeight = wallContainer.offsetHeight;
+
     console.log('🖼️ Génération de la grille');
     const grid = document.getElementById('poster-grid');
     if (!grid) {
@@ -121,8 +124,7 @@ function renderGrid() {
     }
     
     grid.innerHTML = '';
-    const containerWidth = 5000;
-    const containerHeight = 4000;
+    
     const fragmentSize = 200;
     
     animeData.forEach((anime, index) => {
