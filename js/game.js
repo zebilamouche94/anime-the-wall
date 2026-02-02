@@ -45,10 +45,14 @@ function init() {
     updateStats();
     setupEventListeners();
     
-    if (foundAnimes.length > 0 || lives < 3) {
+        if (foundAnimes.length > 0 || lives < 3) {
         console.log('📦 Reprise de partie');
-        startGame();
-    } else {
+        // Cacher l'écran de démarrage et démarrer directement
+        const startScreen = document.getElementById('start-screen');
+        if (startScreen) {
+            startScreen.style.display = 'none';
+        }
+        startGame();} else {
         console.log('🎬 Affichage écran démarrage');
         setupStartButton();
     }
@@ -124,8 +128,7 @@ const containerHeight = wallContainer.offsetHeight;
     }
     
     grid.innerHTML = '';
-    
-    const fragmentSize = 200;
+const containerHeight = 6000;    const fragmentSize = 200;
     
     animeData.forEach((anime, index) => {
         const card = document.createElement('div');
