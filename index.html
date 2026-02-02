@@ -52,7 +52,23 @@
             <button id="reset-button" class="btn btn-small">🔄 Reset</button>
         </div>
     </div>
+<!-- Indicateur de zoom -->
+<div id="zoom-indicator">
+    Zoom: <span id="zoom-level">100%</span>
+</div>
 
+<!-- Aide des contrôles -->
+<div id="controls-help">
+    <h4>Contrôles</h4>
+    <p>🖱️ Molette = Zoom</p>
+    <p>🖱️ Clic droit + drag = Déplacer</p>
+    <p>⌨️ R = Reset</p>
+    <p>⌨️ +/- = Zoom</p>
+    <p>⌨️ Flèches = Déplacer</p>
+</div>
+
+<!-- À ajouter avant la fermeture de </body> -->
+<script src="js/pan-zoom.js"></script>
     <!-- Conteneur du mur -->
     <div id="wall-container">
         <img id="wall-image" src="assets/wall.png" alt="Anime Wall">
