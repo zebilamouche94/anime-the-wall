@@ -3,117 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anime The Wall</title>
+    <title>Anime The Wall - Jeu de reconnaissance d'animes</title>
+    <meta name="description" content="Trouvez tous les animes cachés dans le mur! Un jeu inspiré de PopTheWall avec vos animes préférés.">
+
+    <!-- Fuse.js pour la recherche floue -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+
+    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <!-- Écran de démarrage -->
-    <div id="start-screen">
-        <div class="start-content">
-            <h1>🎌 ANIME THE WALL</h1>
-            <p>Explorez le mur d'affiches et identifiez les 100 animes</p>
-            
-            <div class="game-rules">
-                <div>🎯 Trouvez les 100 animes</div>
-                <div>❤️ 3 erreurs maximum</div>
-                <div>🖱️ Cliquez sur une affiche pour deviner</div>
+    <div id="start-screen" class="modal-overlay">
+        <div class="start-container">
+            <h1>🎮 ANIME THE WALL</h1>
+            <p>Trouvez tous les animes cachés dans le mur!</p>
+            <div class="start-info">
+                <p>📍 Cliquez sur une zone du mur</p>
+                <p>✏️ Devinez le nom de l'anime</p>
+                <p>❤️ Vous avez 3 vies</p>
+                <p>🎯 Trouvez-les tous pour gagner!</p>
             </div>
-            
-            <button id="start-game-btn" class="btn-start">▶ COMMENCER</button>
-            <p class="start-footer">Glissez et zoomez pour explorer le mur</p>
+            <button id="start-button" class="btn btn-primary">COMMENCER</button>
         </div>
     </div>
 
-    <!-- HUD -->
+    <!-- HUD du jeu -->
     <div id="hud">
         <div class="hud-left">
-            <div class="stat">
-                <span class="label">Trouvés:</span>
-                <span id="score" class="value">0</span>
-                <span class="total">/100</span>
+            <div class="hud-item">
+                <span class="hud-label">Score:</span>
+                <span id="score">0</span> / <span id="total">0</span>
             </div>
-            <div class="stat lives-stat">
-                <span class="label">Vies:</span>
-                <span id="lives" class="value">❤️❤️❤️</span>
+            <div class="hud-item">
+                <span class="hud-label">Vies:</span>
+                <span id="lives">❤️❤️❤️</span>
             </div>
         </div>
+
         <div class="hud-right">
-            <button id="reset-btn" class="btn-secondary">🔄</button>
-            <button id="theme-toggle" class="btn-secondary">🌙</button>
+            <div class="hud-item">
+                <span class="hud-label">Progression:</span>
+                <div class="progress-container">
+                    <div id="progress-bar" class="progress-bar"></div>
+                    <span id="progress-text" class="progress-text">0%</span>
+                </div>
+            </div>
+            <button id="reset-button" class="btn btn-small">🔄 Reset</button>
         </div>
     </div>
 
-    <!-- Barre de progression -->
-    <div id="progress-container">
-        <div id="progress-bar"></div>
-    </div>
-    <div id="progress-text">0%</div>
-
-    <!-- Conteneur principal du mur -->
-    <main id="wall-container">
-        <div id="zoom-container">
-            <img id="wall-image" 
-                 src="assets/anime-wall-complete.jpg" 
-                 alt="Mur d'affiches anime"
-                 draggable="false">
-        </div>
-    </main>
-
-    <!-- Instructions -->
-    <div id="instructions">
-        🖱️ Cliquez et glissez pour explorer | 🔍 Molette pour zoomer
+    <!-- Conteneur du mur -->
+    <div id="wall-container">
+        <img id="wall-image" src="assets/wall.png" alt="Anime Wall">
     </div>
 
     <!-- Modal de devinette -->
-    <div id="modal" class="hidden">
-        <div class="modal-backdrop"></div>
+    <div id="guess-modal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
-            <button id="close-modal" class="close-btn">✕</button>
-            <div class="modal-poster-container">
-                <img id="modal-poster" src="" alt="Affiche anime">
-            </div>
-            <div class="modal-form">
-                <label for="guess-input">Quel anime est-ce ?</label>
-                <input type="text" 
-                       id="guess-input" 
-                       placeholder="Tapez le nom..." 
-                       autocomplete="off">
-                <button id="submit-btn" class="btn-primary">✓ Valider</button>
-                <div id="error-msg" class="hidden">❌ Mauvaise réponse !</div>
+            <h2>🎯 Quel est cet anime ?</h2>
+            <input 
+                type="text" 
+                id="guess-input" 
+                placeholder="Entrez le nom de l'anime..." 
+                autocomplete="off"
+            >
+            <div class="modal-buttons">
+                <button id="submit-button" class="btn btn-success">Valider</button>
+                <button class="btn btn-secondary close-modal">Annuler</button>
             </div>
         </div>
     </div>
 
     <!-- Modal de victoire -->
-    <div id="victory-modal" class="hidden">
-        <div class="modal-backdrop"></div>
-        <div class="modal-content victory-content">
-            <h2>🎉 BRAVO !</h2>
-            <p>Tu as trouvé les <strong>100 animes</strong> !</p>
-            <div id="completion-time"></div>
-            <button id="share-btn" class="btn-primary">📤 Partager</button>
-            <button id="restart-btn" class="btn-secondary">🔄 Rejouer</button>
+    <div id="victory-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content victory">
+            <h1>🎉 VICTOIRE !</h1>
+            <p class="victory-message">Félicitations ! Vous avez trouvé tous les animes !</p>
+            <div class="stats">
+                <p id="completion-time">Temps: -</p>
+                <p id="final-score">Score: -</p>
+            </div>
+            <div class="modal-buttons">
+                <button id="share-button" class="btn btn-primary">📤 Partager</button>
+                <button class="btn btn-success close-modal" onclick="location.reload()">Rejouer</button>
+            </div>
         </div>
     </div>
 
     <!-- Modal de game over -->
-    <div id="gameover-modal" class="hidden">
-        <div class="modal-backdrop"></div>
-        <div class="modal-content gameover-content">
-            <h2>💀 GAME OVER</h2>
-            <p>Tu as trouvé <strong id="final-score">0</strong>/100 animes</p>
-            <button id="retry-btn" class="btn-primary">🔄 Réessayer</button>
+    <div id="gameover-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content gameover">
+            <h1>💀 GAME OVER</h1>
+            <p class="gameover-message">Vous n'avez plus de vies...</p>
+            <div class="stats">
+                <p>Animes trouvés:</p>
+                <p id="gameover-score" class="big-score">-</p>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary close-modal" onclick="location.reload()">Réessayer</button>
+            </div>
         </div>
     </div>
 
-    <footer>
-        <p>Créé avec ❤️ pour les fans d'anime</p>
-    </footer>
+    <!-- Sons -->
+    <audio id="sound-correct" src="assets/sounds/correct.mp3" preload="auto"></audio>
+    <audio id="sound-wrong" src="assets/sounds/wrong.mp3" preload="auto"></audio>
+    <audio id="sound-victory" src="assets/sounds/victory.mp3" preload="auto"></audio>
+    <audio id="sound-gameover" src="assets/sounds/gameover.mp3" preload="auto"></audio>
+    <audio id="sound-start" src="assets/sounds/start.mp3" preload="auto"></audio>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- JavaScript -->
     <script src="js/data.js"></script>
     <script src="js/game.js"></script>
 </body>
